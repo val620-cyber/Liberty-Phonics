@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16295C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Liberty Phonics</title>
+<style>
+:root{
+  --red:#D7263D; --red-d:#A3152A;
+  --navy:#16295C; --navy-d:#0B1638;
+  --baby:#9BD3F7; --baby-d:#5FA9DB;
+  --sky:#E6F4FF;
+  --gold:#F7B801; --gold-d:#C28800;
+  --white:#FFFFFF; --white-d:#C9D8EA;
+  --ink:#16295C;
+  --bounce:cubic-bezier(.34,1.56,.64,1);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;min-height:100vh;color:var(--ink);
+  font-family:"Arial Rounded MT Bold","Arial Rounded MT",Arial,Helvetica,sans-serif;
+  position:relative;--hero:64px;
+  background:
+    radial-gradient(circle at 90% 430px,rgba(155,211,247,.34) 0 150px,transparent 151px),
+    radial-gradient(circle at 90% 430px,rgba(155,211,247,.18) 0 230px,transparent 231px),
+    radial-gradient(circle at 4% 820px,rgba(215,38,61,.08) 0 120px,transparent 121px),
+    radial-gradient(circle at 4% 820px,rgba(215,38,61,.045) 0 200px,transparent 201px),
+    radial-gradient(circle at 94% 1250px,rgba(22,41,92,.07) 0 170px,transparent 171px),
+    linear-gradient(#E3F2FF 0,#FFFFFF 75%);
+  background-repeat:no-repeat;background-color:#fff;
+  overscroll-behavior-y:none;
+}
+body[data-s=home],body[data-s=progress]{--hero:166px}
+body[data-s=sounds]{--hero:100px}
+/* Navy night-sky header with red, white and baby-blue ledges stacked beneath it */
+body::before{
+  content:"";position:absolute;z-index:-1;top:0;left:0;right:0;height:var(--hero);
+  border-radius:0 0 46px 46px;
+  background:
+    radial-gradient(circle at 8% 26%,#fff 0 1.6px,transparent 2.2px),
+    radial-gradient(circle at 22% 68%,rgba(255,255,255,.55) 0 1.3px,transparent 2px),
+    radial-gradient(circle at 37% 18%,rgba(255,255,255,.8) 0 1.2px,transparent 1.9px),
+    radial-gradient(circle at 51% 80%,rgba(247,184,1,.9) 0 1.6px,transparent 2.3px),
+    radial-gradient(circle at 63% 34%,rgba(255,255,255,.45) 0 1.2px,transparent 1.9px),
+    radial-gradient(circle at 78% 72%,#fff 0 1.4px,transparent 2.1px),
+    radial-gradient(circle at 93% 22%,rgba(155,211,247,.9) 0 1.6px,transparent 2.3px),
+    radial-gradient(ellipse at 50% -20%,#34529F 0,#16295C 62%,#0B1638 100%);
+  box-shadow:0 10px 0 var(--red),0 20px 0 #fff,0 30px 0 var(--baby),0 44px 40px rgba(22,41,92,.16);
+  transition:height .35s var(--bounce);
+}
+button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulation}
+h1,h2,h3,p{margin:0}
+#app{max-width:480px;margin:0 auto;padding:14px 16px 120px}
+
+/* ---------- puffy 3D pieces ---------- */
+.puff{
+  --c:var(--baby); --d:var(--baby-d); --t:var(--navy);
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 22px;border-radius:999px;font-weight:bold;font-size:18px;color:var(--t);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--c) 80%,#fff) 0,var(--c) 55%);
+  box-shadow:0 6px 0 var(--d),0 12px 20px rgba(22,41,92,.18),inset 0 3px 0 rgba(255,255,255,.55),inset 0 -5px 10px rgba(0,0,0,.07);
+  transition:transform .18s var(--bounce),box-shadow .18s var(--bounce);
+}
+.puff:active{transform:translateY(5px) scale(.97);box-shadow:0 1px 0 var(--d),0 3px 6px rgba(22,41,92,.18),inset 0 3px 0 rgba(255,255,255,.55)}
+.puff.red{--c:var(--red);--d:var(--red-d);--t:#fff}
+.puff.navy{--c:#243E86;--d:var(--navy-d);--t:#fff}
+.puff.gold{--c:var(--gold);--d:var(--gold-d);--t:var(--navy)}
+.puff.white{--c:#fff;--d:var(--white-d);--t:var(--navy)}
+.puff.wide{width:100%}
+.puff[disabled]{opacity:.45;pointer-events:none}
+
+.orb{
+  --c:var(--baby); --d:var(--baby-d);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;
+  background:radial-gradient(circle at 32% 24%,#fff 0,color-mix(in srgb,var(--c) 70%,#fff) 18%,var(--c) 48%,var(--d) 100%);
+  box-shadow:0 7px 0 color-mix(in srgb,var(--d) 80%,#000),0 14px 22px rgba(22,41,92,.22),inset 0 -8px 14px rgba(0,0,0,.12);
+  transition:transform .2s var(--bounce),box-shadow .2s var(--bounce);
+}
+button.orb:active{transform:translateY(5px) scale(.95);box-shadow:0 2px 0 var(--d),0 4px 8px rgba(22,41,92,.2)}
+.orb.red{--c:var(--red);--d:var(--red-d);color:#fff}
+.orb.navy{--c:#2B4A9C;--d:var(--navy-d);color:#fff}
+.orb.gold{--c:var(--gold);--d:var(--gold-d);color:var(--navy)}
+.orb.white{--c:#fff;--d:#BFD3EA;color:var(--navy)}
+.orb.grey{--c:#D5DFEC;--d:#A9B8CC;color:#7C8BA5}
+
+.card{
+  background:#fff;border-radius:32px;padding:20px;margin:16px 0;
+  box-shadow:0 8px 0 #B9DCF7,0 16px 0 rgba(155,211,247,.38),0 30px 40px rgba(22,41,92,.14),inset 0 2px 0 #fff;
+}
+.stats+.card{margin-top:68px}
+.rwb{display:flex;gap:6px;margin:10px 0 2px}
+.rwb i{height:8px;border-radius:999px;flex:1}
+.rwb i:nth-child(1){background:var(--red);flex:3}.rwb i:nth-child(2){background:var(--baby);flex:2}.rwb i:nth-child(3){background:var(--navy);flex:1}
+.fresh .pop{animation:pop .45s var(--bounce) both}
+@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+/* ---------- header ---------- */
+.top{display:flex;align-items:center;gap:10px}
+.top h1{font-size:24px;flex:1;line-height:1.1;color:#fff;text-shadow:0 3px 0 rgba(11,22,56,.6)}
+.top h1 small{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--baby);margin-top:5px;text-shadow:none}
+.top h1 small::before{content:"★ ";color:var(--gold)}
+.top.back{margin-bottom:40px}
+.pill{padding:9px 14px;font-size:14px}
+.round{width:42px;height:42px;padding:0;font-size:18px}
+.stats{display:flex;gap:10px;margin-top:14px}
+.stat{flex:1;background:#fff;border-radius:24px;padding:10px 6px;text-align:center;box-shadow:0 5px 0 #A9CDEB,inset 0 2px 0 #fff}
+.stat:nth-child(1){background:linear-gradient(#E8485C,var(--red));color:#fff;box-shadow:0 5px 0 var(--red-d),inset 0 2px 0 rgba(255,255,255,.4)}
+.stat:nth-child(1) span{color:rgba(255,255,255,.9)}
+.stat:nth-child(3){background:linear-gradient(#C4E6FB,var(--baby));box-shadow:0 5px 0 var(--baby-d),inset 0 2px 0 rgba(255,255,255,.6)}
+.stat:nth-child(3) span{color:var(--navy)}
+.stat b{display:block;font-size:22px}
+.stat span{font-size:11px;color:#5C6F96}
+
+/* ---------- today ---------- */
+h2{font-size:20px}
+.sub{font-size:14px;color:#5C6F96;margin-top:4px}
+.sub.onhero{color:var(--baby)}
+.chips{display:flex;gap:10px;margin:12px 0 6px}
+.chip{width:52px;height:52px;font-size:24px}
+.task{
+  width:100%;display:flex;align-items:center;gap:12px;text-align:left;
+  background:var(--sky);border-radius:999px;padding:10px 16px 10px 10px;margin-top:10px;font-size:16px;font-weight:bold;
+  box-shadow:0 4px 0 #C4DDF3,inset 0 2px 0 #fff;transition:transform .18s var(--bounce);
+}
+.task:active{transform:translateY(3px) scale(.98)}
+.tick{width:38px;height:38px;border-radius:50%;background:#fff;box-shadow:inset 0 3px 6px rgba(22,41,92,.18);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;flex:none}
+.task.ok .tick{background:radial-gradient(circle at 32% 24%,#fff 0,var(--gold) 45%,var(--gold-d) 100%);box-shadow:0 3px 0 var(--gold-d);color:var(--navy)}
+.task .tl{flex:1}
+.task .go{font-size:24px;color:var(--baby-d)}
+
+/* ---------- world map ---------- */
+.mapwrap{margin:34px -4px 0;padding:26px 10px 30px;border-radius:46px;color:#fff;
+  background:
+    radial-gradient(circle at 12% 6%,#fff 0 1.6px,transparent 2.2px),
+    radial-gradient(circle at 84% 12%,rgba(247,184,1,.9) 0 1.8px,transparent 2.5px),
+    radial-gradient(circle at 70% 38%,rgba(255,255,255,.5) 0 1.3px,transparent 2px),
+    radial-gradient(circle at 16% 55%,rgba(155,211,247,.9) 0 1.6px,transparent 2.3px),
+    radial-gradient(circle at 88% 78%,#fff 0 1.4px,transparent 2.1px),
+    radial-gradient(circle at 30% 92%,rgba(255,255,255,.5) 0 1.3px,transparent 2px),
+    radial-gradient(circle at 50% 0,rgba(155,211,247,.22) 0 130px,transparent 131px),
+    radial-gradient(circle at 50% 0,rgba(155,211,247,.10) 0 230px,transparent 231px),
+    linear-gradient(#22408F 0,#16295C 45%,#0B1638 100%);
+  box-shadow:0 10px 0 var(--red),0 20px 0 #fff,0 30px 0 var(--baby),0 46px 40px rgba(22,41,92,.2)}
+.mapwrap .orb{box-shadow:0 7px 0 color-mix(in srgb,var(--d) 80%,#000),0 0 0 12px rgba(255,255,255,.07),0 0 0 26px rgba(255,255,255,.04),0 16px 24px rgba(0,0,0,.35),inset 0 -8px 14px rgba(0,0,0,.12)}
+.mapwrap .orb.grey{--c:#3F5FB8;--d:#1A2D69;color:var(--baby)}
+.mapwrap .node span{color:var(--navy);box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.mapwrap .soon{box-shadow:0 5px 0 rgba(0,0,0,.35);margin-top:8px}
+.world{margin:0 0 2px;text-align:center;text-shadow:0 3px 0 rgba(11,22,56,.6)}
+.map{display:flex;flex-direction:column;align-items:center;gap:30px;padding:30px 0 0}
+.node{display:flex;flex-direction:column;align-items:center;gap:8px;background:none;padding:0}
+.node:nth-child(4n+1){transform:translateX(-70px)}
+.node:nth-child(4n+2){transform:translateX(0)}
+.node:nth-child(4n+3){transform:translateX(70px)}
+.node:nth-child(4n+4){transform:translateX(0)}
+.node .orb{width:86px;height:86px;font-size:34px}
+.node.cur .orb{animation:pulse 1.6s ease-in-out infinite}
+.node span{font-size:14px;font-weight:bold;background:#fff;border-radius:999px;padding:4px 12px;box-shadow:0 3px 0 #D3E6F8;letter-spacing:.12em}
+.soon{background:#fff;border-radius:999px;padding:12px 22px;font-size:14px;color:#5C6F96;box-shadow:0 5px 0 #D3E6F8}
+
+/* ---------- sound board ---------- */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:72px}
+.grid .orb.dim{opacity:.55}
+.grid .orb{width:100%;aspect-ratio:1;font-size:30px}
+.big{width:150px;height:150px;font-size:76px;margin:30px auto 38px;box-shadow:0 7px 0 var(--baby-d),0 0 0 14px rgba(155,211,247,.28),0 0 0 30px rgba(155,211,247,.13),0 16px 24px rgba(22,41,92,.22),inset 0 -8px 14px rgba(0,0,0,.12)}
+.snd{width:100%;display:flex;align-items:center;gap:12px;text-align:left;background:var(--sky);border-radius:28px;padding:10px 14px 10px 10px;margin-top:12px;box-shadow:0 5px 0 #C4DDF3,inset 0 2px 0 #fff;transition:transform .18s var(--bounce)}
+.snd:active{transform:translateY(4px) scale(.98)}
+.snd .orb{width:76px;height:76px;font-size:30px;flex:none}
+.snd .say{flex:1;font-size:26px}
+.snd .ex{text-align:right;font-size:16px;color:#5C6F96;line-height:1.25}
+.snd .ex small{display:block;font-size:11px;font-weight:normal;font-family:Arial,Helvetica,sans-serif}
+.pic{width:130px;height:130px;font-size:64px;margin:20px auto 6px}
+.slots{display:flex;justify-content:center;gap:10px;margin:22px 0 26px}
+.slot{width:62px;height:84px;font-size:46px;font-weight:bold;display:flex;align-items:center;justify-content:center;position:relative;border-radius:22px;background:rgba(255,255,255,.7);box-shadow:inset 0 3px 6px rgba(22,41,92,.12)}
+.slot::after{content:"";position:absolute;left:8px;right:8px;bottom:-12px;height:9px;border-radius:999px;background:var(--baby-d);transition:background .2s}
+.slot.ok{background:#FFF4CF;animation:pulse .4s var(--bounce)}
+.slot.ok::after{background:var(--gold)}
+.slot.bad{background:#FBD5DA;animation:shake .35s}
+.slot.bad::after{background:var(--red)}
+.bank{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;max-width:330px;margin:0 auto}
+.bt{width:86px;height:86px;font-size:40px;touch-action:none;user-select:none;-webkit-user-select:none}
+.bt.used{opacity:.18;pointer-events:none;transform:scale(.8)}
+.snd.heard{background:#FFF4CF;box-shadow:0 5px 0 #F0DC9A,inset 0 2px 0 #fff}
+.hl{color:var(--red)}
+.tip{font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.45;background:#FFF9E6;border-radius:22px;padding:12px 16px;margin-top:16px}
+.note{font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.45;color:#5C6F96;margin-top:10px}
+.center{text-align:center}
+.row{display:flex;gap:12px;margin-top:18px}
+.row>*{flex:1}
+
+/* ---------- activities ---------- */
+.bar{height:16px;border-radius:999px;background:#fff;box-shadow:inset 0 3px 5px rgba(22,41,92,.15);overflow:hidden;flex:1}
+.bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(180deg,#FFD95A,var(--gold));transition:width .4s var(--bounce)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.choices .puff{font-size:44px;padding:22px 0;border-radius:36px}
+.choices .right{--c:var(--gold);--d:var(--gold-d);--t:var(--navy);animation:pulse .5s var(--bounce)}
+.choices .wrong{--c:var(--red);--d:var(--red-d);--t:#fff;animation:shake .35s}
+.hint{font-size:34px;letter-spacing:.08em;margin-top:10px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.tile{aspect-ratio:1;border-radius:28px;font-size:34px;font-weight:bold;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 30% 22%,#4A6BC4 0,#243E86 60%,var(--navy-d) 100%);color:transparent;
+  box-shadow:0 6px 0 var(--navy-d),0 12px 18px rgba(22,41,92,.2);transition:transform .25s var(--bounce)}
+.tile small{font-size:12px;font-family:Arial,Helvetica,sans-serif}
+.tile.open,.tile.done{background:#fff;color:var(--navy);box-shadow:0 6px 0 #C4DDF3,0 12px 18px rgba(22,41,92,.12);transform:scale(1.03)}
+.tile.done{background:#FFF4CF;box-shadow:0 6px 0 #F0DC9A}
+.tile:not(.open):not(.done)::before{content:"★";color:rgba(255,255,255,.85);font-size:30px}
+.tile:not(.open):not(.done)>*{display:none}
+.bigstar{font-size:120px;line-height:1;filter:drop-shadow(0 8px 0 rgba(22,41,92,.15))}
+.bigstar.gold{color:var(--gold)} .bigstar.white{color:#fff;-webkit-text-stroke:3px var(--baby-d)}
+
+/* ---------- calendar ---------- */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:12px;text-align:center}
+.cal b{font-size:11px;color:#5C6F96}
+.day{aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--sky)}
+.day.part{background:var(--baby);box-shadow:0 3px 0 var(--baby-d)}
+.day.full{background:radial-gradient(circle at 32% 24%,#fff 0,var(--gold) 45%,var(--gold-d) 100%);box-shadow:0 3px 0 var(--gold-d)}
+.day.now{outline:3px solid var(--navy);outline-offset:1px}
+.day.x{background:none}
+.legend{display:flex;gap:14px;justify-content:center;font-size:12px;margin-top:14px;font-family:Arial,Helvetica,sans-serif}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+
+/* ---------- studio ---------- */
+.recrow{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:2px dotted #D3E6F8}
+.recrow .nm{flex:1;font-size:17px}
+.recrow .nm small{display:block;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#5C6F96}
+.recrow .puff{width:44px;height:44px;padding:0;font-size:17px}
+.recrow .live{animation:pulse .8s infinite}
+
+/* ---------- tabs ---------- */
+#tabs{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;padding:10px 16px calc(12px + env(safe-area-inset-bottom));pointer-events:none}
+#tabs div{display:flex;gap:8px;background:#fff;border-radius:999px;padding:8px;box-shadow:0 6px 0 #D3E6F8,0 14px 28px rgba(22,41,92,.2);pointer-events:auto}
+#tabs button{background:none;border-radius:999px;padding:10px 18px;font-size:14px;font-weight:bold;color:#5C6F96;transition:all .2s var(--bounce)}
+#tabs button.on{background:linear-gradient(180deg,#3555AE,#243E86);color:#fff;box-shadow:0 4px 0 var(--navy-d)}
+
+/* ---------- confetti ---------- */
+.conf{position:fixed;top:-40px;font-size:26px;pointer-events:none;z-index:9;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav id="tabs"></nav>
+
+<script>
+/* =====================================================================
+   LIBERTY PHONICS — World 1 starter
+   One file, no build step, no server. Sections:
+   1. Content (phonograms, levels, translations)
+   2. Saved progress
+   3. Audio (teacher recordings, fallback voice, sound effects, haptics)
+   4. Screens
+   5. Actions
+   ===================================================================== */
+
+/* ---------- 1. CONTENT ---------- */
+// Each phonogram: g = letters, s = sounds [label, keyword with [target] marked, Spanish word, emoji]
+const P = [
+ {g:'a', s:[['ă','[a]pple','manzana','🍎'],['ā','c[a]ke','pastel','🎂'],['ah','f[a]ther','padre','👨']],
+  en:"Three sounds. The first (ă) is not in Spanish: open your mouth for 'a' but smile like 'e'.",
+  es:"Tres sonidos. El primero (ă) no existe en español: abre la boca como para 'a' pero sonríe como para 'e'."},
+ {g:'c', s:[['k','[c]at','gato','🐱'],['s','[c]ity','ciudad','🏙️']],
+  en:"Two sounds: /k/ and /s/. It says /s/ before e, i, or y — just like in Spanish.",
+  es:"Dos sonidos: /k/ y /s/. Dice /s/ antes de e, i, o y — igual que en español."},
+ {g:'d', s:[['d','[d]og','perro','🐶']],
+  en:"Tap your tongue behind your top teeth. It is firmer than the Spanish d.",
+  es:"Toca con la lengua detrás de los dientes de arriba. Es más firme que la d española."},
+ {g:'f', s:[['f','[f]ish','pez','🐟']],
+  en:"Same as Spanish.", es:"Igual que en español."},
+ {g:'g', s:[['g','[g]oat','cabra','🐐'],['j','[g]em','gema','💎']],
+  en:"Two sounds: /g/ as in 'gato', and /j/. It may say /j/ before e, i, or y.",
+  es:"Dos sonidos: /g/ como en 'gato', y /j/. Puede decir /j/ antes de e, i, o y."},
+ {g:'o', s:[['ŏ','[o]ctopus','pulpo','🐙'],['ō','g[o]','ir','🚦'],['ōō','d[o]','hacer','💪']],
+  en:"Three sounds. The first (ŏ) sounds almost like the Spanish 'a'.",
+  es:"Tres sonidos. El primero (ŏ) suena casi como la 'a' española."},
+ {g:'s', s:[['s','[s]un','sol','☀️'],['z','ro[s]e','rosa','🌹']],
+  en:"Two sounds: /s/ and /z/. For /z/, make your throat buzz like a bee.",
+  es:"Dos sonidos: /s/ y /z/. Para /z/, haz vibrar la garganta como una abeja."},
+ {g:'qu', s:[['kw','[qu]een','reina','👑']],
+  en:"In English, q always walks with u. Together they say /kw/, like 'cu' in 'cuando'.",
+  es:"En inglés, la q siempre va con la u. Juntas dicen /kw/, como 'cu' en 'cuando'."},
+ {g:'b', s:[['b','[b]us','autobús','🚌']],
+  en:"Close your lips all the way. It is never soft like the Spanish b between vowels.",
+  es:"Cierra los labios por completo. Nunca es suave como la b española entre vocales."},
+ {g:'e', s:[['ĕ','[e]gg','huevo','🥚'],['ē','h[e]','él','👦']],
+  en:"Two sounds: (ĕ) like a short Spanish 'e', and (ē) like the Spanish 'i'.",
+  es:"Dos sonidos: (ĕ) como una 'e' española corta, y (ē) como la 'i' española."},
+ {g:'h', s:[['h','[h]at','sombrero','🎩']],
+  en:"Not silent! It is a soft puff of air, softer than the Spanish 'j'.",
+  es:"¡No es muda! Es un soplo de aire suave, más suave que la 'j' española."},
+ {g:'i', s:[['ĭ','[i]nsect','insecto','🐞'],['ī','[i]ce','hielo','🧊']],
+  en:"Two sounds. The first (ĭ) is not in Spanish: short and relaxed, between 'i' and 'e'.",
+  es:"Dos sonidos. El primero (ĭ) no existe en español: corto y relajado, entre 'i' y 'e'."},
+ {g:'j', s:[['j','[j]et','avión','✈️']],
+  en:"Like 'ch' with your voice turned on. Feel your throat buzz.",
+  es:"Como una 'ch' con voz. Siente vibrar la garganta."},
+ {g:'k', s:[['k','[k]ey','llave','🔑']],
+  en:"Like 'c' in 'casa', with a little puff of air.",
+  es:"Como la 'c' en 'casa', con un pequeño soplo de aire."},
+ {g:'l', s:[['l','[l]emon','limón','🍋']],
+  en:"Same as Spanish.", es:"Igual que en español."},
+ {g:'m', s:[['m','[m]oon','luna','🌙']],
+  en:"Same as Spanish.", es:"Igual que en español."},
+ {g:'n', s:[['n','[n]ose','nariz','👃']],
+  en:"Same as Spanish.", es:"Igual que en español."},
+ {g:'p', s:[['p','[p]ig','cerdo','🐷']],
+  en:"Like Spanish, but with a puff of air.",
+  es:"Como en español, pero con un soplo de aire."},
+ {g:'r', s:[['r','[r]ocket','cohete','🚀']],
+  en:"Do not tap the roof of your mouth. Curl your tongue back and round your lips.",
+  es:"No toques el paladar. Enrolla la lengua hacia atrás y redondea los labios."},
+ {g:'t', s:[['t','[t]iger','tigre','🐯']],
+  en:"Tongue behind your top teeth, with a puff of air.",
+  es:"Lengua detrás de los dientes de arriba, con un soplo de aire."},
+ {g:'u', s:[['ŭ','[u]mbrella','paraguas','☂️'],['ū','m[u]sic','música','🎵'],['o͝o','p[u]t','poner','📥']],
+  en:"Three sounds: (ŭ) short and relaxed; (ū) says its name; and the short sound in 'put'.",
+  es:"Tres sonidos: (ŭ) corto y relajado; (ū) dice su nombre; y el sonido corto de 'put'."},
+ {g:'v', s:[['v','[v]an','camioneta','🚐']],
+  en:"Not the same as b! Top teeth touch your bottom lip and it buzzes.",
+  es:"¡No es igual que la b! Los dientes de arriba tocan el labio de abajo y vibra."},
+ {g:'w', s:[['w','[w]eb','telaraña','🕸️']],
+  en:"Like the 'u' in 'huevo'. Round your lips.",
+  es:"Como la 'u' en 'huevo'. Redondea los labios."},
+ {g:'x', s:[['ks','bo[x]','caja','📦']],
+  en:"It says /ks/, as in 'taxi'.", es:"Dice /ks/, como en 'taxi'."},
+ {g:'y', s:[['y','[y]arn','estambre','🧶'],['ĭ','g[y]m','gimnasio','🏋️'],['ī','sk[y]','cielo','🌤️']],
+  en:"Three sounds: /y/ at the start of a word, then (ĭ) and (ī) like the letter i.",
+  es:"Tres sonidos: /y/ al inicio de una palabra, luego (ĭ) y (ī) como la letra i."},
+ {g:'z', s:[['z','[z]ebra','cebra','🦓']],
+  en:"Like s with a buzz in your throat: zzz.",
+  es:"Como una s con vibración en la garganta: zzz."},
+];
+// World 1 levels: which phonograms unlock at each level
+const LV = [['a','b','c','d'],['e','f','g','h'],['i','j','k','l'],['m','n','o','p'],['qu','r','s','t'],['u','v','w','x'],['y','z']];
+const ABC = LV.flat(); P.sort((x,y)=>ABC.indexOf(x.g)-ABC.indexOf(y.g));
+const VOWELS = ['a','e','i','o','u','y'];
+// Build-a-Word lists. Each level's words use only letters learned so far, and every letter says its FIRST sound.
+// [word, Spanish meaning, picture]
+const WORDS = [
+ [['cab','taxi','🚕'],['dad','papá','👨'],['bad','malo','👎'],['add','sumar','➕']],
+ [['bed','cama','🛏️'],['bag','bolsa','👜'],['egg','huevo','🥚'],['beg','rogar','🙏']],
+ [['kid','niño','🧒'],['leg','pierna','🦵'],['big','grande','🐘'],['bell','campana','🔔'],['hill','colina','⛰️']],
+ [['map','mapa','🗺️'],['pen','pluma','🖊️'],['dog','perro','🐶'],['pig','cerdo','🐷'],['hen','gallina','🐔'],['mom','mamá','👩'],['hand','mano','✋'],['lamp','lámpara','💡'],['milk','leche','🥛']],
+ [['cat','gato','🐱'],['hat','sombrero','🎩'],['bat','murciélago','🦇'],['red','rojo','🔴'],['ten','diez','🔟'],['frog','rana','🐸'],['crab','cangrejo','🦀'],['tent','tienda de campaña','⛺']],
+ [['sun','sol','☀️'],['bus','autobús','🚌'],['cup','taza','☕'],['box','caja','📦'],['fox','zorro','🦊'],['six','seis','6️⃣'],['web','telaraña','🕸️'],['van','camioneta','🚐'],['drum','tambor','🥁']],
+ [['yes','sí','✅'],['zip','cierre','🤐'],['yam','camote','🍠'],['jazz','jazz','🎷']]
+];
+
+const byG = {}; const SOUNDS = [];
+P.forEach(p=>{ byG[p.g]=p; p.snd = p.s.map((s,i)=>({id:p.g+(i+1), g:p.g, label:s[0], kw:s[1], word:s[1].replace(/[\[\]]/g,''), es:s[2], em:s[3]})); SOUNDS.push(...p.snd); });
+const sndById = Object.fromEntries(SOUNDS.map(s=>[s.id,s]));
+
+const T = {
+ en:{app:'Liberty Phonics',motto:'In God We Trust',streak:'day streak',gold:'gold stars',white:'white stars',
+  today:"Today's practice",todayLetters:'Your letters today',task_cards:'Phonogram cards',task_hear:'Hear & Tap',task_match:'Match game',task_build:'Build a word',buildTitle:'Build the word',buildHint:'Tap or drag the letters onto the lines.',vowelQ:'Which sound of “{g}” did you hear?',bonus:'Bonus',example:'example',
+  world:'World 1 · The Alphabet Sounds',soon:'World 2 · Vowel & Consonant Teams — coming soon',
+  home:'Home',sounds:'Sounds',progress:'Progress',
+  soundsTitle:'Sound Board',soundsSub:'Tap any letter to hear its sounds.',
+  back:'Back',next:'Next',tapAll:'Tap every sound to hear it.',startQuiz:'Start the quiz',newSounds:'New sounds',
+  quizQ:'Which one makes this sound?',noRec:"Listen to the word. Which letter is missing?",
+  cont:'Continue',retry:'Try again',
+  perfect:'Perfect! Gold star!',pass:'Level complete! White star!',fail:'Almost! Practice and try again.',
+  score:'Score',dayTask:'Checked off for today!',dayAll:'All of today\'s practice is done! Well done, good and faithful student.',
+  flashTitle:'Say the sounds, then check',hear:'Hear it',got:'I knew it',again:'Practice more',
+  matchTitle:'Match the letter to its picture',
+  progTitle:'My Progress',learned:'phonograms unlocked',practiced:'days practiced',lvDone:'levels done',
+  full:'All done',part:'Some practice',
+  settings:'Settings',lang:'Language',sfx:'Sound effects',on:'On',off:'Off',studio:'Teacher Studio',reset:'Reset my progress',resetQ:'Erase all progress on this device?',
+  studioTitle:'Teacher Studio',studioSub:'Record each sound in your own voice. Tap ⏺, say only the sound, tap ⏹.',
+  recorded:'recorded',exportBtn:'Download recordings (zip)',
+  studioNote:'Recordings are saved on this device right away. To share them with every student, download the zip and add its contents to the "audio" folder of the project (see README).',
+  micErr:'The microphone is not available here. Open the app in Safari or Chrome from its web address and allow the microphone.',
+  nothing:'No recordings yet.'},
+ es:{app:'Liberty Phonics',motto:'In God We Trust · En Dios confiamos',streak:'días seguidos',gold:'estrellas de oro',white:'estrellas blancas',
+  today:'Práctica de hoy',todayLetters:'Tus letras de hoy',task_cards:'Tarjetas de fonogramas',task_hear:'Escucha y toca',task_match:'Juego de parejas',task_build:'Construye la palabra',buildTitle:'Construye la palabra',buildHint:'Toca o arrastra las letras a las líneas.',vowelQ:'¿Qué sonido de la “{g}” escuchaste?',bonus:'Extra',example:'ejemplo',
+  world:'Mundo 1 · Los sonidos del alfabeto',soon:'Mundo 2 · Equipos de vocales y consonantes — muy pronto',
+  home:'Inicio',sounds:'Sonidos',progress:'Progreso',
+  soundsTitle:'Tablero de sonidos',soundsSub:'Toca cualquier letra para oír sus sonidos.',
+  back:'Atrás',next:'Siguiente',tapAll:'Toca cada sonido para escucharlo.',startQuiz:'Empezar la prueba',newSounds:'Sonidos nuevos',
+  quizQ:'¿Cuál hace este sonido?',noRec:'Escucha la palabra. ¿Qué letra falta?',
+  cont:'Continuar',retry:'Intentar otra vez',
+  perfect:'¡Perfecto! ¡Estrella de oro!',pass:'¡Nivel completo! ¡Estrella blanca!',fail:'¡Casi! Practica e inténtalo otra vez.',
+  score:'Puntos',dayTask:'¡Marcado por hoy!',dayAll:'¡Terminaste toda la práctica de hoy! Bien hecho, estudiante bueno y fiel.',
+  flashTitle:'Di los sonidos y luego comprueba',hear:'Escuchar',got:'Lo sabía',again:'Practicar más',
+  matchTitle:'Une la letra con su dibujo',
+  progTitle:'Mi progreso',learned:'fonogramas desbloqueados',practiced:'días practicados',lvDone:'niveles completos',
+  full:'Todo hecho',part:'Algo de práctica',
+  settings:'Ajustes',lang:'Idioma',sfx:'Efectos de sonido',on:'Sí',off:'No',studio:'Estudio del maestro',reset:'Borrar mi progreso',resetQ:'¿Borrar todo el progreso en este dispositivo?',
+  studioTitle:'Estudio del maestro',studioSub:'Graba cada sonido con tu propia voz. Toca ⏺, di solo el sonido, toca ⏹.',
+  recorded:'grabados',exportBtn:'Descargar grabaciones (zip)',
+  studioNote:'Las grabaciones se guardan en este dispositivo de inmediato. Para compartirlas con todos los estudiantes, descarga el zip y agrega su contenido a la carpeta "audio" del proyecto (ver README).',
+  micErr:'El micrófono no está disponible aquí. Abre la app en Safari o Chrome desde su dirección web y permite el micrófono.',
+  nothing:'Aún no hay grabaciones.'}
+};
+const t = k => (T[S.lang]||T.en)[k] || T.en[k] || k;
+
+/* ---------- 2. SAVED PROGRESS ---------- */
+const KEY='liberty-phonics-v1';
+let S = {lang:(navigator.language||'en').startsWith('es')?'es':'en', done:{}, days:{}, sfx:true};
+try{ Object.assign(S, JSON.parse(localStorage.getItem(KEY)||'{}')); }catch(e){}
+const save = ()=>{ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} };
+
+const dkey = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const today = ()=>dkey(new Date());
+const TASKS = ['cards','hear','build'];
+const nDone = ()=>{ let n=0; while(S.done[n]) n++; return n; };
+const curLv = ()=>Math.min(nDone(), LV.length-1);
+const unlocked = ()=>LV.slice(0,curLv()+1).flat();
+const starCount = k => Object.values(S.done).filter(v=>v===k).length;
+function streak(){ let n=0, d=new Date(); if(!S.days[dkey(d)]) d.setDate(d.getDate()-1); while(S.days[dkey(d)]){ n++; d.setDate(d.getDate()-1); } return n; }
+function markTask(k){ const d=today(); const day=S.days[d]||(S.days[d]={}); const wasAll=TASKS.every(x=>day[x]); day[k]=1; save(); return !wasAll && TASKS.every(x=>day[x]); }
+
+/* ---------- 3. AUDIO, EFFECTS, HAPTICS ---------- */
+const A = {local:{}, manifest:{}, db:null};
+function openDB(){ return new Promise(res=>{ try{ const r=indexedDB.open('liberty-phonics-audio',1); r.onupgradeneeded=()=>r.result.createObjectStore('rec'); r.onsuccess=()=>res(r.result); r.onerror=()=>res(null); }catch(e){ res(null); } }); }
+async function loadAudio(){
+  A.db = await openDB();
+  if(A.db) await new Promise(res=>{ try{ const rq=A.db.transaction('rec').objectStore('rec').openCursor(); rq.onsuccess=()=>{ const c=rq.result; if(c){ A.local[c.key]=c.value; c.continue(); } else res(); }; rq.onerror=()=>res(); }catch(e){ res(); } });
+  try{ const r=await fetch('audio/manifest.json',{cache:'no-cache'}); if(r.ok) A.manifest=await r.json(); }catch(e){}
+}
+const dbPut=(id,blob)=>{ A.local[id]=blob; try{ A.db&&A.db.transaction('rec','readwrite').objectStore('rec').put(blob,id); }catch(e){} };
+const dbDel=id=>{ delete A.local[id]; try{ A.db&&A.db.transaction('rec','readwrite').objectStore('rec').delete(id); }catch(e){} };
+const hasAudio = id => !!(A.local[id]||A.manifest[id]);
+
+let curAudio=null;
+function stopAudio(){ try{ if(curAudio){ curAudio.pause(); curAudio=null; } if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){} }
+function speak(text){ return new Promise(res=>{ try{
+  if(!window.speechSynthesis) return res();
+  const u=new SpeechSynthesisUtterance(text); u.lang='en-US'; u.rate=.8; u.onend=u.onerror=()=>res();
+  speechSynthesis.speak(u); setTimeout(res,3500);
+ }catch(e){ res(); } }); }
+// Plays the teacher's recording if there is one; otherwise a computer voice says the keyword.
+function play(id){ return new Promise(res=>{
+  stopAudio();
+  const blob=A.local[id]; let url=null;
+  if(blob) url=URL.createObjectURL(blob); else if(A.manifest[id]) url='audio/'+A.manifest[id];
+  if(!url) return speak(sndById[id].word).then(res);
+  const au=new Audio(url); curAudio=au;
+  const fin=()=>{ if(blob) URL.revokeObjectURL(url); res(); };
+  au.onended=fin; au.onerror=fin; au.play().catch(fin); setTimeout(res,5000);
+ }); }
+async function playAll(g){ for(const s of byG[g].snd){ await play(s.id); await new Promise(r=>setTimeout(r,250)); } }
+
+let actx=null;
+function tone(freqs,dur=.11,type='sine',vol=.12){ if(!S.sfx) return; try{
+  actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+  if(actx.state==='suspended') actx.resume();
+  freqs.forEach((f,i)=>{ const o=actx.createOscillator(), g=actx.createGain(), t0=actx.currentTime+i*dur*.9;
+    o.type=type; o.frequency.value=f; g.gain.setValueAtTime(vol,t0); g.gain.exponentialRampToValueAtTime(.001,t0+dur*1.6);
+    o.connect(g); g.connect(actx.destination); o.start(t0); o.stop(t0+dur*1.7); });
+ }catch(e){} }
+const sfx = { pop:()=>tone([520],.05,'sine',.07), good:()=>tone([660,880]), bad:()=>tone([220,180],.14,'triangle'), win:()=>tone([523,659,784,1047],.14) };
+
+// Vibration: works on Android. On iPhone it uses a small Safari trick that works on recent iOS versions only.
+let hapEl=null;
+function buzz(pattern=12){ try{
+  if(navigator.vibrate){ navigator.vibrate(pattern); return; }
+  if(!hapEl){ hapEl=document.createElement('label'); hapEl.style.cssText='position:fixed;left:-99px;top:0;opacity:0;pointer-events:none';
+    const i=document.createElement('input'); i.type='checkbox'; i.setAttribute('switch',''); hapEl.appendChild(i); document.body.appendChild(hapEl); }
+  hapEl.click();
+ }catch(e){} }
+
+function confetti(){
+  const chars=['★','★','★','●'], cols=['#F7B801','#D7263D','#FFFFFF','#9BD3F7','#16295C'];
+  for(let i=0;i<36;i++){ const el=document.createElement('div'); el.className='conf'; el.textContent=chars[i%4];
+    el.style.left=(Math.random()*100)+'vw'; el.style.color=cols[i%5]; el.style.textShadow='0 2px 0 rgba(22,41,92,.25)';
+    el.style.animationDuration=(1.6+Math.random()*1.6)+'s'; el.style.animationDelay=(Math.random()*.4)+'s';
+    document.body.appendChild(el); setTimeout(()=>el.remove(),4000); }
+}
+function celebrate(){ confetti(); sfx.win(); buzz([30,60,30,60,80]); }
+
+// Tiny zip writer (no compression) so recordings can be downloaded as one file.
+function crc32(u8){ let crc=-1; for(let i=0;i<u8.length;i++){ let c=(crc^u8[i])&255; for(let k=0;k<8;k++) c=c&1?(c>>>1)^0xEDB88320:c>>>1; crc=(crc>>>8)^c; } return (crc^-1)>>>0; }
+function makeZip(files){
+  const enc=new TextEncoder(), parts=[], cen=[]; let off=0;
+  for(const f of files){ const n=enc.encode(f.name), crc=crc32(f.data), sz=f.data.length;
+    const h=new DataView(new ArrayBuffer(30)); h.setUint32(0,0x04034b50,true); h.setUint16(4,20,true); h.setUint16(6,0x0800,true); h.setUint16(12,0x21,true);
+    h.setUint32(14,crc,true); h.setUint32(18,sz,true); h.setUint32(22,sz,true); h.setUint16(26,n.length,true);
+    parts.push(new Uint8Array(h.buffer),n,f.data);
+    const c=new DataView(new ArrayBuffer(46)); c.setUint32(0,0x02014b50,true); c.setUint16(4,20,true); c.setUint16(6,20,true); c.setUint16(8,0x0800,true); c.setUint16(14,0x21,true);
+    c.setUint32(16,crc,true); c.setUint32(20,sz,true); c.setUint32(24,sz,true); c.setUint16(28,n.length,true); c.setUint32(42,off,true);
+    cen.push(new Uint8Array(c.buffer),n); off+=30+n.length+sz; }
+  const cs=cen.reduce((a,b)=>a+b.length,0), e=new DataView(new ArrayBuffer(22));
+  e.setUint32(0,0x06054b50,true); e.setUint16(8,files.length,true); e.setUint16(10,files.length,true); e.setUint32(12,cs,true); e.setUint32(16,off,true);
+  return new Blob([...parts,...cen,new Uint8Array(e.buffer)],{type:'application/zip'});
+}
+
+/* ---------- 4. SCREENS ---------- */
+let V={scr:'home'};
+const $=s=>document.querySelector(s);
+const shuffle=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const kwHTML=kw=>kw.replace(/\[(.+?)\]/,'<span class="hl">$1</span>');
+const kwBlank=kw=>kw.replace(/\[(.+?)\]/,(m,x)=>'_'.repeat(x.length));
+function go(scr,p){ stopAudio(); V=Object.assign({scr},p||{}); render(true); window.scrollTo(0,0); }
+
+function header(title){ return `<div class="top"><h1>${title||t('app')}<small>${t('motto')}</small></h1>
+  <button class="puff white pill" data-a="lang">${S.lang==='es'?'ES':'EN'}</button>
+  <button class="puff white round" data-a="nav" data-s="settings" aria-label="${t('settings')}">⚙</button></div>`; }
+function backBar(extra){ return `<div class="top back"><button class="puff white pill" data-a="home">‹ ${t('back')}</button>${extra||'<span style="flex:1"></span>'}</div>`; }
+function soundRow(s,heard){ return `<button class="snd ${heard?'heard':''}" data-a="hear" data-id="${s.id}">
+  <span class="orb navy">${s.label}</span><span class="say">🔊</span><span class="ex"><small>${t('example')}</small>${kwHTML(s.kw)} ${s.em}<small>${s.es}</small></span></button>`; }
+
+const SCREENS = {
+ home(){ const c=curLv(), day=S.days[today()]||{}, n=nDone(), icons={cards:'🃏',hear:'👂',build:'🧱'};
+  return header()+`
+  <div class="stats">
+    <div class="stat"><b>🔥 ${streak()}</b><span>${t('streak')}</span></div>
+    <div class="stat"><b style="color:var(--gold-d)">★ ${starCount('gold')}</b><span>${t('gold')}</span></div>
+    <div class="stat"><b>☆ ${starCount('white')}</b><span>${t('white')}</span></div>
+  </div>
+  <section class="card pop"><h2>${t('today')}</h2><div class="rwb"><i></i><i></i><i></i></div><p class="sub">${t('todayLetters')}</p>
+    <div class="chips">${LV[c].map((g,i)=>`<button class="orb chip ${['red','white','navy',''][i%4]}" data-a="ph" data-g="${g}">${g}</button>`).join('')}</div>
+    ${TASKS.map(k=>`<button class="task ${day[k]?'ok':''}" data-a="task" data-k="${k}"><span class="tick">${day[k]?'✓':''}</span><span class="tl">${icons[k]} ${t('task_'+k)}</span><span class="go">›</span></button>`).join('')}
+    <button class="puff white wide" style="margin-top:16px;font-size:15px;padding:11px 18px" data-a="task" data-k="match">🧩 ${t('bonus')}: ${t('task_match')}</button>
+  </section>
+  <div class="mapwrap"><h2 class="world">${t('world')}</h2>
+  <div class="map">${LV.map((l,i)=>{ const st=S.done[i], isCur=i===n, lock=i>n;
+     return `<button class="node ${isCur?'cur':''}" data-a="level" data-i="${i}" ${lock?'disabled':''}>
+       <div class="orb ${st==='gold'?'gold':st==='white'?'white':isCur?'red':'grey'}">${st?'★':lock?'🔒':i+1}</div><span>${l.join(' ')}</span></button>`; }).join('')}
+    <div class="soon">${t('soon')}</div>
+  </div></div>`; },
+
+ sounds(){ const u=unlocked();
+  return header(t('soundsTitle'))+`<p class="sub onhero" style="margin-top:12px">${t('soundsSub')}</p>
+  <div class="grid">${P.map((p,i)=>`<button class="orb ${['red','white','navy',''][(i+Math.floor(i/4))%4]} ${u.includes(p.g)?'':'dim'}" data-a="ph" data-g="${p.g}">${p.g}</button>`).join('')}</div>`; },
+
+ ph(){ const p=byG[V.g];
+  return backBar()+`<div class="card pop center"><div class="orb big">${p.g}</div>
+   ${p.snd.map(s=>soundRow(s)).join('')}<p class="tip" style="text-align:left">💡 ${p[S.lang]||p.en}</p></div>`; },
+
+ meet(){ const gs=LV[V.lv], p=byG[gs[V.i]], all=p.snd.every(s=>V.heard[s.id]), last=V.i===gs.length-1;
+  return backBar(`<div class="bar"><i style="width:${(V.i+(all?1:0))/gs.length*100}%"></i></div>`)+`
+   <div class="card pop center"><p class="sub">${t('newSounds')} · ${V.i+1}/${gs.length}</p><div class="orb big">${p.g}</div>
+   ${p.snd.map(s=>soundRow(s,V.heard[s.id])).join('')}
+   <p class="tip" style="text-align:left">💡 ${p[S.lang]||p.en}</p>
+   <p class="note">${all?'':t('tapAll')}</p>
+   <div class="row"><button class="puff red wide" data-a="meetNext" ${all?'':'disabled'}>${last?t('startQuiz'):t('next')} ›</button></div></div>`; },
+
+ quiz(){ const q=V.qs[V.i], rec=hasAudio(q.id);
+  return backBar(`<div class="bar"><i style="width:${V.i/V.qs.length*100}%"></i></div>`)+`
+   <div class="center" style="margin-top:22px"><h2>${q.type==='v'?t('vowelQ').replace('{g}',q.g):rec?t('quizQ'):t('noRec')}</h2>
+   <button class="orb red" style="width:120px;height:120px;font-size:50px;margin:20px auto 0" data-a="replay" aria-label="${t('hear')}">🔊</button>
+   ${rec||q.type==='v'?'':`<div class="hint">${q.em} ${kwBlank(q.kw)}</div>`}</div>
+   <div class="choices">${q.choices.map((g,i)=>{ let c='navy'; if(V.ans!=null){ if(g===q.ans) c='right'; else if(g===V.ans) c='wrong'; }
+     return `<button class="puff ${c}" data-a="answer" data-i="${i}">${g}</button>`; }).join('')}</div>`; },
+
+ build(){ const w=V.ws[V.i], col=['red','white','navy',''];
+  return backBar(`<div class="bar"><i style="width:${V.i/V.ws.length*100}%"></i></div>`)+`
+   <div class="center"><h2>${t('buildTitle')}</h2>
+   <button class="orb white pic" data-a="sayWord" aria-label="${t('hear')}">${w[2]}</button><p class="sub">🔊 ${w[1]}</p>
+   <div class="slots">${V.slots.map((g,i)=>`<div class="slot ${g?'ok':''} ${V.bad===i?'bad':''}" data-slot="${i}">${g||''}</div>`).join('')}</div>
+   <div class="bank">${V.tiles.map((x,i)=>`<button class="orb bt ${col[i%4]} ${x.used?'used':''}" data-tile="${i}">${x.g}</button>`).join('')}</div>
+   <p class="note">${t('buildHint')}</p></div>`; },
+
+ flash(){ const g=V.q[V.i];
+  return backBar(`<div class="bar"><i style="width:${V.i/V.q.length*100}%"></i></div>`)+`
+   <div class="card pop center"><p class="sub">${t('flashTitle')}</p><div class="orb big" style="margin-top:14px">${g}</div>
+   <button class="puff navy wide" data-a="flashHear">🔊 ${t('hear')}</button>
+   <div class="row"><button class="puff white" data-a="flashAgain">↻ ${t('again')}</button><button class="puff gold" data-a="flashGot">✓ ${t('got')}</button></div></div>`; },
+
+ match(){ return backBar()+`<h2 class="center" style="margin-top:18px">${t('matchTitle')}</h2>
+   <div class="tiles">${V.tiles.map((x,i)=>`<button class="tile ${x.done?'done':x.open?'open':''}" data-a="tile" data-i="${i}">
+     ${x.type==='g'?`<span>${x.g}</span>`:`<span>${byG[x.g].snd[0].em}</span><small>${byG[x.g].snd[0].word}</small>`}</button>`).join('')}</div>`; },
+
+ result(){ return `<div class="card pop center" style="margin-top:40px">
+   ${V.star?`<div class="bigstar ${V.star}">★</div>`:`<div style="font-size:90px">${V.icon||'💪'}</div>`}
+   <h2 style="margin-top:12px">${V.msg}</h2>${V.score!=null?`<p class="sub">${t('score')}: ${V.score}/${V.total}</p>`:''}
+   ${V.extra?`<p class="tip">${V.extra}</p>`:''}
+   <div class="row">${V.retry?`<button class="puff white" data-a="${V.retry}" data-i="${V.lv}" data-k="${V.k||''}">↻ ${t('retry')}</button>`:''}
+   <button class="puff red" data-a="home">${t('cont')} ›</button></div></div>`; },
+
+ progress(){ const now=new Date(), m=new Date(now.getFullYear(), now.getMonth()+(V.off||0), 1);
+  const first=m.getDay(), dim=new Date(m.getFullYear(),m.getMonth()+1,0).getDate(), td=today();
+  const name=m.toLocaleDateString(S.lang==='es'?'es-US':'en-US',{month:'long',year:'numeric'});
+  const wd=S.lang==='es'?['D','L','M','M','J','V','S']:['S','M','T','W','T','F','S'];
+  let cells=wd.map(d=>`<b>${d}</b>`).join('')+'<div class="day x"></div>'.repeat(first);
+  for(let d=1;d<=dim;d++){ const k=dkey(new Date(m.getFullYear(),m.getMonth(),d)), day=S.days[k];
+    const cls=day?(TASKS.every(x=>day[x])?'full':'part'):''; cells+=`<div class="day ${cls} ${k===td?'now':''}">${cls==='full'?'★':d}</div>`; }
+  return header(t('progTitle'))+`
+   <div class="stats"><div class="stat"><b>${nDone()>=LV.length?26:LV.slice(0,nDone()).flat().length}/26</b><span>${t('learned')}</span></div>
+     <div class="stat"><b>${Object.keys(S.days).length}</b><span>${t('practiced')}</span></div>
+     <div class="stat"><b>${nDone()}/${LV.length}</b><span>${t('lvDone')}</span></div></div>
+   <section class="card"><div class="top"><button class="puff white round" data-a="month" data-d="-1">‹</button>
+     <h2 class="center" style="flex:1;text-transform:capitalize">${name}</h2><button class="puff white round" data-a="month" data-d="1">›</button></div>
+     <div class="cal">${cells}</div>
+     <div class="legend"><span><i style="background:var(--gold)"></i>${t('full')}</span><span><i style="background:var(--baby)"></i>${t('part')}</span></div></section>`; },
+
+ settings(){ return backBar()+`<section class="card"><h2>${t('settings')}</h2>
+   <div class="row"><button class="puff ${S.lang==='en'?'navy':'white'}" data-a="setLang" data-l="en">English</button><button class="puff ${S.lang==='es'?'navy':'white'}" data-a="setLang" data-l="es">Español</button></div>
+   <div class="row"><button class="puff white wide" data-a="sfx">🔔 ${t('sfx')}: ${S.sfx?t('on'):t('off')}</button></div>
+   <div class="row"><button class="puff gold wide" data-a="nav" data-s="studio">🎙 ${t('studio')}</button></div>
+   <div class="row"><button class="puff white wide" data-a="reset">${t('reset')}</button></div></section>`; },
+
+ studio(){ const n=SOUNDS.filter(s=>A.local[s.id]).length;
+  return `<div class="top"><button class="puff white pill" data-a="nav" data-s="settings">‹ ${t('back')}</button><span style="flex:1"></span></div>
+   <section class="card"><h2>🎙 ${t('studioTitle')}</h2><p class="note">${t('studioSub')}</p>
+   <p class="sub"><b>${n}/${SOUNDS.length}</b> ${t('recorded')}</p>
+   ${V.err?`<p class="tip">${t('micErr')}</p>`:''}
+   ${SOUNDS.map(s=>{ const has=A.local[s.id], live=V.rec===s.id;
+     return `<div class="recrow"><div class="nm"><b>${s.g}</b> · ${s.label}<small>${s.word}${A.manifest[s.id]&&!has?' · ✓ online':''}</small></div>
+       <button class="puff ${live?'red live':'white'}" data-a="rec" data-id="${s.id}">${live?'⏹':'⏺'}</button>
+       <button class="puff ${has?'gold':'white'}" data-a="hear" data-id="${s.id}" ${has||A.manifest[s.id]?'':'disabled'}>▶</button>
+       <button class="puff white" data-a="recDel" data-id="${s.id}" ${has?'':'disabled'}>✕</button></div>`; }).join('')}
+   <div class="row"><button class="puff navy wide" data-a="export" ${n?'':'disabled'}>⬇ ${t('exportBtn')}</button></div>
+   <p class="note">${t('studioNote')}</p></section>`; }
+};
+
+function render(fresh){
+  $('#app').classList.toggle('fresh', fresh===true);
+  $('#app').innerHTML = SCREENS[V.scr]();
+  const tabs=['home','sounds','progress'], icon={home:'🏠',sounds:'🔤',progress:'📅'};
+  $('#tabs').innerHTML = tabs.includes(V.scr) ? `<div>${tabs.map(s=>`<button class="${V.scr===s?'on':''}" data-a="nav" data-s="${s}">${icon[s]} ${t(s)}</button>`).join('')}</div>` : '';
+  document.documentElement.lang=S.lang; document.body.dataset.s=V.scr;
+}
+
+/* ---------- 5. ACTIONS ---------- */
+// "Which letter makes this sound?"  Wrong choices never share the target sound, so there is exactly one right answer.
+function qLetter(s){
+  const ok=g=>g!==s.g && !byG[g].snd.some(x=>x.label===s.label);
+  let ds=shuffle(unlocked().filter(ok)).slice(0,3);
+  if(ds.length<3) ds=ds.concat(shuffle(ABC.filter(g=>ok(g)&&!ds.includes(g))).slice(0,3-ds.length));
+  return {id:s.id,type:'g',g:s.g,ans:s.g,kw:s.kw,em:s.em,choices:shuffle([s.g,...ds])};
+}
+// Vowel drill: "Which sound of a did you hear?"
+function qVowel(s){ return {id:s.id,type:'v',g:s.g,ans:s.label,choices:shuffle(byG[s.g].snd.map(x=>x.label))}; }
+const isVowelSound = s => VOWELS.includes(s.g) && byG[s.g].snd.length>1;
+function startQuiz(mode,lv){
+  let qs;
+  if(mode==='level'){
+    const mine=LV[lv].flatMap(g=>byG[g].snd);
+    const older=shuffle(LV.slice(0,lv).flat().flatMap(g=>byG[g].snd)).slice(0,Math.max(0,8-mine.length));
+    qs=shuffle(mine.concat(older).map(qLetter)).concat(shuffle(mine.filter(isVowelSound).map(qVowel)));
+  } else {
+    const all=unlocked().flatMap(g=>byG[g].snd);
+    qs=shuffle(shuffle(all).slice(0,6).map(qLetter).concat(shuffle(all.filter(isVowelSound)).slice(0,3).map(qVowel)));
+  }
+  go('quiz',{mode,lv,qs,i:0,score:0,ans:null});
+  play(V.qs[0].id);
+}
+function finishQuiz(){
+  const n=V.qs.length, sc=V.score;
+  if(V.mode==='level'){
+    const lv=V.lv, pass=sc>=Math.ceil(n*.75);
+    if(pass){ const star=sc===n?'gold':'white'; if(S.done[lv]!=='gold') S.done[lv]=star; save();
+      go('result',{star,msg:t(star==='gold'?'perfect':'pass'),score:sc,total:n,lv,retry:star==='gold'?null:'quizLevel'}); celebrate(); }
+    else { go('result',{icon:'💪',msg:t('fail'),score:sc,total:n,lv,retry:'level'}); }
+  } else finishTask('hear',sc,n);
+}
+function finishTask(k,sc,n){
+  const all=markTask(k);
+  go('result',{icon:'✅',msg:t('dayTask'),score:sc,total:n,extra:all?t('dayAll'):null,star:all?'gold':null});
+  celebrate();
+}
+function startMatch(){
+  const gs=shuffle(unlocked()).slice(0,6);
+  go('match',{tiles:shuffle(gs.flatMap(g=>[{g,type:'g'},{g,type:'e'}])),first:null,lock:false,left:gs.length});
+}
+// ----- Build-a-Word: place letters on the lines by tapping or dragging -----
+function wordState(w){
+  const gs=w[0].split(''), u=unlocked(), tiles=gs.slice();
+  while(tiles.length<Math.max(6,gs.length+2)) tiles.push(u[Math.floor(Math.random()*u.length)]);
+  return {gs, slots:gs.map(()=>null), tiles:shuffle(tiles).map(g=>({g,used:false})), bad:null};
+}
+function startBuild(){
+  const c=curLv(), recent=WORDS[c], older=WORDS.slice(0,c).flat();
+  const ws=shuffle(recent).slice(0,older.length?3:4).concat(shuffle(older).slice(0,2));
+  go('build',Object.assign({ws,i:0},wordState(ws[0])));
+}
+function place(ti,si){
+  const tile=V.tiles[ti], v=V;
+  if(si==null) si=V.slots.indexOf(null);
+  if(!tile||tile.used||si<0||V.slots[si]){ render(); return; }
+  if(tile.g===V.gs[si]){
+    V.slots[si]=tile.g; tile.used=true; V.bad=null; render(); sfx.good(); buzz(25);
+    if(V.slots.every(Boolean)){
+      setTimeout(async()=>{ if(V!==v) return; confetti(); sfx.win(); buzz([30,60,30]); await speak(v.ws[v.i][0]);
+        setTimeout(()=>{ if(V!==v) return; if(V.i+1>=V.ws.length) finishTask('build'); else { V.i++; Object.assign(V,wordState(V.ws[V.i])); render(true); } },700); },500);
+    } else play(tile.g+'1');
+  } else {
+    V.bad=si; render(); sfx.bad(); buzz([40,50,40]);
+    setTimeout(()=>{ if(V===v&&V.bad===si){ V.bad=null; render(); } },650);
+  }
+}
+let drag=null;
+document.addEventListener('pointerdown',e=>{ const el=e.target.closest('[data-tile]'); if(!el||V.scr!=='build') return;
+  drag={el,i:+el.dataset.tile,x:e.clientX,y:e.clientY,moved:false}; });
+document.addEventListener('pointermove',e=>{ if(!drag) return; const dx=e.clientX-drag.x, dy=e.clientY-drag.y;
+  if(!drag.moved&&Math.hypot(dx,dy)<8) return; drag.moved=true;
+  drag.el.style.transition='none'; drag.el.style.zIndex=5; drag.el.style.transform=`translate(${dx}px,${dy}px) scale(1.12)`; });
+document.addEventListener('pointerup',e=>{ if(!drag) return; const d=drag; drag=null; let si=null;
+  if(d.moved){ d.el.style.visibility='hidden'; const under=document.elementFromPoint(e.clientX,e.clientY); d.el.style.visibility='';
+    const sl=under&&under.closest('[data-slot]'); if(!sl){ render(); return; } si=+sl.dataset.slot; }
+  place(d.i,si); });
+document.addEventListener('pointercancel',()=>{ if(drag){ drag=null; render(); } });
+
+let rec=null;
+async function toggleRec(id){
+  if(rec){ rec.mr.stop(); return; }
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    const mr=new MediaRecorder(stream), chunks=[];
+    mr.ondataavailable=e=>{ if(e.data.size) chunks.push(e.data); };
+    mr.onstop=()=>{ clearTimeout(rec.timer); stream.getTracks().forEach(x=>x.stop()); dbPut(id,new Blob(chunks,{type:mr.mimeType||'audio/mp4'})); rec=null; V.rec=null; render(); sfx.good(); };
+    rec={mr,timer:setTimeout(()=>mr.state==='recording'&&mr.stop(),5000)};
+    mr.start(); V.rec=id; V.err=false; render();
+  }catch(e){ rec=null; V.rec=null; V.err=true; render(); }
+}
+async function exportAudio(){
+  const files=[], manifest={};
+  for(const s of SOUNDS){ const b=A.local[s.id]; if(!b) continue;
+    const ext=/mp4|m4a|aac/.test(b.type)?'m4a':/ogg/.test(b.type)?'ogg':/wav/.test(b.type)?'wav':'webm';
+    manifest[s.id]=s.id+'.'+ext; files.push({name:s.id+'.'+ext,data:new Uint8Array(await b.arrayBuffer())}); }
+  files.push({name:'manifest.json',data:new TextEncoder().encode(JSON.stringify(manifest,null,1))});
+  const url=URL.createObjectURL(makeZip(files)), a=document.createElement('a');
+  a.href=url; a.download='audio.zip'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),10000);
+}
+
+const ACT = {
+ nav:d=>go(d.s), home:()=>go('home'),
+ lang:()=>{ S.lang=S.lang==='es'?'en':'es'; save(); render(); },
+ setLang:d=>{ S.lang=d.l; save(); render(); },
+ sfx:()=>{ S.sfx=!S.sfx; save(); render(); sfx.good(); },
+ reset:()=>{ if(confirm(t('resetQ'))){ S.done={}; S.days={}; save(); go('home'); } },
+ ph:d=>go('ph',{g:d.g}),
+ hear:d=>{ if(V.scr==='meet'){ V.heard[d.id]=1; render(); } play(d.id); },
+ level:d=>go('meet',{lv:+d.i,i:0,heard:{}}),
+ quizLevel:d=>startQuiz('level',+d.i),
+ meetNext:()=>{ if(V.i<LV[V.lv].length-1){ V.i++; render(true); window.scrollTo(0,0); } else startQuiz('level',V.lv); },
+ replay:()=>play(V.qs[V.i].id),
+ answer:d=>{ if(V.ans) return; const q=V.qs[V.i], pick=q.choices[+d.i], right=pick===q.ans; V.ans=pick; if(right){ V.score++; sfx.good(); buzz(25); } else { sfx.bad(); buzz([40,50,40]); }
+   render(); const v=V; setTimeout(()=>{ if(V!==v) return; V.i++; V.ans=null; if(V.i>=V.qs.length) finishQuiz(); else { render(); play(V.qs[V.i].id); } }, right?800:1500); },
+ sayWord:()=>speak(V.ws[V.i][0]),
+ task:d=>{ if(d.k==='cards') go('flash',{q:shuffle(unlocked()).slice(0,12),i:0}); else if(d.k==='hear') startQuiz('daily'); else if(d.k==='build') startBuild(); else startMatch(); },
+ flashHear:()=>playAll(V.q[V.i]),
+ flashGot:()=>{ sfx.good(); buzz(25); V.i++; if(V.i>=V.q.length) finishTask('cards'); else render(); },
+ flashAgain:()=>{ if(V.q.length<30) V.q.push(V.q[V.i]); V.i++; if(V.i>=V.q.length) finishTask('cards'); else render(); },
+ tile:d=>{ const i=+d.i, x=V.tiles[i]; if(V.lock||x.open||x.done) return; x.open=true;
+   if(V.first===null){ V.first=i; render(); if(x.type==='g') play(byG[x.g].snd[0].id); return; }
+   const y=V.tiles[V.first], v=V; V.first=null;
+   if(y.g===x.g){ x.done=y.done=true; V.left--; render(); sfx.good(); buzz(25); play(byG[x.g].snd[0].id);
+     if(!V.left) setTimeout(()=>{ if(V===v) finishTask('match'); },1100); }
+   else { V.lock=true; render(); sfx.bad(); setTimeout(()=>{ if(V!==v) return; x.open=y.open=false; V.lock=false; render(); },900); } },
+ month:d=>{ V.off=(V.off||0)+(+d.d); render(); },
+ rec:d=>toggleRec(d.id),
+ recDel:d=>{ dbDel(d.id); render(); },
+ export:()=>exportAudio()
+};
+
+document.addEventListener('click',e=>{ const el=e.target.closest('[data-a]'); if(!el||el.disabled) return; const f=ACT[el.dataset.a]; if(f) f(el.dataset); });
+document.addEventListener('pointerdown',e=>{ if(e.target.closest('button')){ buzz(12); sfx.pop(); } });
+
+render();
+loadAudio().then(render);
+</script>
+</body>
+</html>
