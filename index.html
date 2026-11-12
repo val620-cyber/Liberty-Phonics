@@ -171,8 +171,9 @@ h2{font-size:20px}
 .bank{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;max-width:330px;margin:0 auto}
 .bt{width:86px;height:86px;font-size:40px;touch-action:none;user-select:none;-webkit-user-select:none}
 .bt.used{opacity:.18;pointer-events:none;transform:scale(.8)}
-.snd{width:100%;display:flex;align-items:center;background:none;padding:4px 0;margin-top:16px;text-align:left;transition:transform .18s var(--bounce)}
-.snd:active{transform:scale(.96)}
+.snd{width:100%;display:flex;align-items:center;padding:4px 0;margin-top:16px}
+.snd .ex{transition:transform .18s var(--bounce)}
+.snd .ex:active{transform:translateY(4px) scale(.97)}
 .snd .orb{width:80px;height:80px;font-size:30px;flex:none;position:relative;z-index:1;animation:bob 2.8s ease-in-out infinite alternate}
 .snd:nth-of-type(even) .orb{animation-delay:-1.4s}
 .snd .orb::after{content:"🔊";position:absolute;right:-8px;bottom:-6px;width:32px;height:32px;border-radius:50%;background:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 var(--white-d)}
@@ -290,7 +291,7 @@ body.tabbed #calm{bottom:calc(88px + env(safe-area-inset-bottom))}
 /* ---------- 1. CONTENT ---------- */
 // Each phonogram: g = letters, s = sounds [label, keyword with [target] marked, Spanish word, emoji]
 const P = [
- {g:'a', s:[['ă','[a]pple','manzana','🍎'],['ā','c[a]ke','pastel','🎂'],['ah','f[a]ther','padre','👨']],
+ {g:'a', s:[['ă','[a]pple','manzana','🍎'],['ā','[a]ngel','ángel','👼'],['ah','[a]lmond','almendra','🌰']],
   en:"Three sounds. The first (ă) is not in Spanish: open your mouth for 'a' but smile like 'e'.",
   es:"Tres sonidos. El primero (ă) no existe en español: abre la boca como para 'a' pero sonríe como para 'e'."},
  {g:'c', s:[['k','[c]at','gato','🐱'],['s','[c]ity','ciudad','🏙️']],
@@ -304,7 +305,7 @@ const P = [
  {g:'g', s:[['g','[g]oat','cabra','🐐'],['j','[g]em','gema','💎']],
   en:"Two sounds: /g/ as in 'gato', and /j/. It may say /j/ before e, i, or y.",
   es:"Dos sonidos: /g/ como en 'gato', y /j/. Puede decir /j/ antes de e, i, o y."},
- {g:'o', s:[['ŏ','[o]ctopus','pulpo','🐙'],['ō','g[o]','ir','🚦'],['ōō','d[o]','hacer','💪']],
+ {g:'o', s:[['ŏ','[o]ctopus','pulpo','🐙'],['ō','[o]cean','océano','🌊'],['ōō','d[o]','hacer','💪']],
   en:"Three sounds. The first (ŏ) sounds almost like the Spanish 'a'.",
   es:"Tres sonidos. El primero (ŏ) suena casi como la 'a' española."},
  {g:'s', s:[['s','[s]un','sol','☀️'],['z','ro[s]e','rosa','🌹']],
@@ -316,7 +317,7 @@ const P = [
  {g:'b', s:[['b','[b]us','autobús','🚌']],
   en:"Close your lips all the way. It is never soft like the Spanish b between vowels.",
   es:"Cierra los labios por completo. Nunca es suave como la b española entre vocales."},
- {g:'e', s:[['ĕ','[e]gg','huevo','🥚'],['ē','h[e]','él','👦']],
+ {g:'e', s:[['ĕ','[e]gg','huevo','🥚'],['ē','[e]mail','correo','📧']],
   en:"Two sounds: (ĕ) like a short Spanish 'e', and (ē) like the Spanish 'i'.",
   es:"Dos sonidos: (ĕ) como una 'e' española corta, y (ē) como la 'i' española."},
  {g:'h', s:[['h','[h]at','sombrero','🎩']],
@@ -346,7 +347,7 @@ const P = [
  {g:'t', s:[['t','[t]iger','tigre','🐯']],
   en:"Tongue behind your top teeth, with a puff of air.",
   es:"Lengua detrás de los dientes de arriba, con un soplo de aire."},
- {g:'u', s:[['ŭ','[u]mbrella','paraguas','☂️'],['ū','m[u]sic','música','🎵'],['o͝o','p[u]t','poner','📥']],
+ {g:'u', s:[['ŭ','[u]mbrella','paraguas','☂️'],['ū','[u]nicorn','unicornio','🦄'],['o͝o','p[u]t','poner','📥']],
   en:"Three sounds: (ŭ) short and relaxed; (ū) says its name; and the short sound in 'put'.",
   es:"Tres sonidos: (ŭ) corto y relajado; (ū) dice su nombre; y el sonido corto de 'put'."},
  {g:'v', s:[['v','[v]an','camioneta','🚐']],
@@ -383,6 +384,8 @@ const WORDS = [
 const byG = {}; const SOUNDS = [];
 P.forEach(p=>{ byG[p.g]=p; p.snd = p.s.map((s,i)=>({id:p.g+(i+1), g:p.g, label:s[0], kw:s[1], word:s[1].replace(/[\[\]]/g,''), es:s[2], em:s[3]})); SOUNDS.push(...p.snd); });
 const sndById = Object.fromEntries(SOUNDS.map(s=>[s.id,s]));
+const BWORDS = [...new Set(WORDS.flat().map(w=>w[0]))];
+const CLIPS = SOUNDS.map(s=>s.id).concat(SOUNDS.map(s=>s.id+'w'), BWORDS.map(w=>'w-'+w));
 
 const T = {
  en:{app:'Liberty Phonics',motto:'In God We Trust',streak:'day streak',gold:'gold stars',white:'white stars',
@@ -400,7 +403,7 @@ const T = {
   progTitle:'My Progress',learned:'phonograms unlocked',practiced:'days practiced',lvDone:'levels done',
   full:'All done',part:'Some practice',
   settings:'Settings',lang:'Language',sfx:'Sound effects',on:'On',off:'Off',studio:'Teacher Studio',reset:'Reset my progress',resetQ:'Erase all progress on this device?',
-  studioTitle:'Teacher Studio',studioSub:'Record each sound in your own voice. Tap ⏺, say only the sound, tap ⏹.',
+  studioTitle:'Teacher Studio',studioSub:'Record each clip in your own voice. Tap ⏺, speak, tap ⏹.',secSounds:'Phonogram sounds',secSoundsSub:'Say only the sound.',secEx:'Example words',secBuild:'Build-a-Word words',secWordSub:'Say only the word. Optional: until you record a word, a computer voice says it.',hearWord:'Hear the word',
   recorded:'recorded',exportBtn:'Download recordings (zip)',
   studioNote:'Recordings are saved on this device right away. To share them with every student, download the zip and add its contents to the "audio" folder of the project (see README).',
   micErr:'The microphone is not available here. Open the app in Safari or Chrome from its web address and allow the microphone.',
@@ -420,7 +423,7 @@ const T = {
   progTitle:'Mi progreso',learned:'fonogramas desbloqueados',practiced:'días practicados',lvDone:'niveles completos',
   full:'Todo hecho',part:'Algo de práctica',
   settings:'Ajustes',lang:'Idioma',sfx:'Efectos de sonido',on:'Sí',off:'No',studio:'Estudio del maestro',reset:'Borrar mi progreso',resetQ:'¿Borrar todo el progreso en este dispositivo?',
-  studioTitle:'Estudio del maestro',studioSub:'Graba cada sonido con tu propia voz. Toca ⏺, di solo el sonido, toca ⏹.',
+  studioTitle:'Estudio del maestro',studioSub:'Graba cada clip con tu propia voz. Toca ⏺, habla, toca ⏹.',secSounds:'Sonidos de los fonogramas',secSoundsSub:'Di solo el sonido.',secEx:'Palabras de ejemplo',secBuild:'Palabras para construir',secWordSub:'Di solo la palabra. Opcional: hasta que grabes una palabra, la dice una voz de computadora.',hearWord:'Escuchar la palabra',
   recorded:'grabados',exportBtn:'Descargar grabaciones (zip)',
   studioNote:'Las grabaciones se guardan en este dispositivo de inmediato. Para compartirlas con todos los estudiantes, descarga el zip y agrega su contenido a la carpeta "audio" del proyecto (ver README).',
   micErr:'El micrófono no está disponible aquí. Abre la app en Safari o Chrome desde su dirección web y permite el micrófono.',
@@ -465,16 +468,21 @@ function speak(text){ return new Promise(res=>{ try{
   const u=new SpeechSynthesisUtterance(text); u.lang='en-US'; u.rate=.8; u.onend=u.onerror=()=>res();
   speechSynthesis.speak(u); setTimeout(res,3500);
  }catch(e){ res(); } }); }
-// Plays the teacher's recording if there is one; otherwise a computer voice says the keyword.
-function play(id){ return new Promise(res=>{
+// Plays one clip. Order: a recording on this device, then the teacher's uploaded file.
+// If there is none (or it cannot play) a computer voice says `fallback`; with no fallback it stays silent.
+function playClip(id,fallback){ return new Promise(res=>{
   stopAudio();
-  const blob=A.local[id]; let url=null;
+  const blob=A.local[id]; let url=null, over=false;
   if(blob) url=URL.createObjectURL(blob); else if(A.manifest[id]) url='audio/'+A.manifest[id];
-  if(!url) return speak(sndById[id].word).then(res);
+  const alt=()=>{ if(over) return; over=true; if(fallback) speak(fallback).then(res); else res(); };
+  if(!url) return alt();
   const au=new Audio(url); curAudio=au;
-  const fin=()=>{ if(blob) URL.revokeObjectURL(url); res(); };
-  au.onended=fin; au.onerror=fin; au.play().catch(fin); setTimeout(res,5000);
+  au.onended=()=>{ if(over) return; over=true; if(blob) URL.revokeObjectURL(url); res(); };
+  au.onerror=alt; au.play().catch(alt); setTimeout(()=>{ if(!over){ over=true; res(); } },6000);
  }); }
+const play = id => playClip(id, sndById[id].word);          // a phonogram sound (sound cards, quizzes)
+const playSoundOnly = id => playClip(id, null);              // a phonogram sound, never a word (word building)
+const sayWord = (word,id) => playClip(id, word);             // a whole word
 async function playAll(g){ for(const s of byG[g].snd){ await play(s.id); await new Promise(r=>setTimeout(r,250)); } }
 
 let actx=null;
@@ -534,8 +542,8 @@ function header(title){ return `<div class="top"><h1>${title||t('app')}<small>${
   <button class="puff white pill" data-a="lang">${S.lang==='es'?'ES':'EN'}</button>
   <button class="puff white round" data-a="nav" data-s="settings" aria-label="${t('settings')}">⚙</button></div>`; }
 function backBar(extra){ return `<div class="top back"><button class="puff white pill" data-a="home">‹ ${t('back')}</button>${extra||'<span style="flex:1"></span>'}</div>`; }
-function soundRow(s,heard){ return `<button class="snd ${heard?'heard':''}" data-a="hear" data-id="${s.id}">
-  <span class="orb navy">${s.label}</span><span class="link"></span><span class="ex"><small>${t('example')}</small>${kwHTML(s.kw)} <span class="em">${s.em}</span><small>${s.es}</small></span></button>`; }
+function soundRow(s,heard){ return `<div class="snd ${heard?'heard':''}">
+  <button class="orb navy" data-a="hear" data-id="${s.id}">${s.label}</button><span class="link"></span><button class="ex" data-a="word" data-id="${s.id}"><small>🔊 ${t('example')}</small>${kwHTML(s.kw)} <span class="em">${s.em}</span><small>${s.es}</small></button></div>`; }
 
 const SCREENS = {
  home(){ const c=curLv(), day=S.days[today()]||{}, n=nDone(), icons={cards:'🃏',hear:'👂',build:'🧱'};
@@ -584,7 +592,8 @@ const SCREENS = {
  build(){ const w=V.ws[V.i], col=['red','white','navy',''];
   return backBar(`<div class="bar"><i style="width:${V.i/V.ws.length*100}%"></i></div>`)+`
    <div class="center"><h2>${t('buildTitle')}</h2>
-   <button class="orb white pic" data-a="sayWord" aria-label="${t('hear')}">${w[2]}</button><p class="sub">🔊 ${w[1]}</p>
+   <button class="orb white pic" data-a="sayWord" aria-label="${t('hearWord')}">${w[2]}</button>
+   <div><button class="puff navy" style="margin-top:14px;font-size:16px;padding:11px 20px" data-a="sayWord">🔊 ${t('hearWord')}</button></div>
    <div class="slots">${V.slots.map((g,i)=>`<div class="slot ${g?'ok':''} ${V.bad===i?'bad':''}" data-slot="${i}">${g||''}</div>`).join('')}</div>
    <div class="bank">${V.tiles.map((x,i)=>`<button class="orb bt ${col[i%4]} ${x.used?'used':''}" data-tile="${i}">${x.g}</button>`).join('')}</div>
    <p class="note">${t('buildHint')}</p></div>`; },
@@ -635,17 +644,21 @@ const SCREENS = {
    ${V.err?`<p class="tip">${t('wrongCode')}</p>`:''}
    <div class="row"><button class="puff red wide" data-a="unlock">${t('unlock')} ›</button></div></section>`; },
 
- studio(){ const n=SOUNDS.filter(s=>A.local[s.id]).length;
+ studio(){
+  const row=(id,title,sub)=>{ const has=A.local[id], live=V.rec===id, on=A.manifest[id];
+    return `<div class="recrow"><div class="nm">${title}<small>${sub}${on&&!has?' · ✓ online':''}</small></div>
+      <button class="puff ${live?'red live':'white'}" data-a="rec" data-id="${id}">${live?'⏹':'⏺'}</button>
+      <button class="puff ${has?'gold':'white'}" data-a="clip" data-id="${id}" ${has||on?'':'disabled'}>▶</button>
+      <button class="puff white" data-a="recDel" data-id="${id}" ${has?'':'disabled'}>✕</button></div>`; };
+  const cnt=ids=>ids.filter(id=>A.local[id]||A.manifest[id]).length;
+  const sec=(title,sub,ids,rows)=>`<h3 style="margin-top:26px;font-size:18px">${title} · ${cnt(ids)}/${ids.length}</h3><p class="note">${sub}</p>${rows}`;
   return `<div class="top"><button class="puff white pill" data-a="nav" data-s="settings">‹ ${t('back')}</button><span style="flex:1"></span><button class="puff white pill" data-a="relock">🔒 ${t('lockAgain')}</button></div>
-   <section class="card"><h2>🎙 ${t('studioTitle')}</h2><p class="note">${t('studioSub')}</p>
-   <p class="sub"><b>${n}/${SOUNDS.length}</b> ${t('recorded')}</p>
+   <section class="card" style="margin-top:56px"><h2>🎙 ${t('studioTitle')}</h2><p class="note">${t('studioSub')}</p>
    ${V.err?`<p class="tip">${t('micErr')}</p>`:''}
-   ${SOUNDS.map(s=>{ const has=A.local[s.id], live=V.rec===s.id;
-     return `<div class="recrow"><div class="nm"><b>${s.g}</b> · ${s.label}<small>${s.word}${A.manifest[s.id]&&!has?' · ✓ online':''}</small></div>
-       <button class="puff ${live?'red live':'white'}" data-a="rec" data-id="${s.id}">${live?'⏹':'⏺'}</button>
-       <button class="puff ${has?'gold':'white'}" data-a="hear" data-id="${s.id}" ${has||A.manifest[s.id]?'':'disabled'}>▶</button>
-       <button class="puff white" data-a="recDel" data-id="${s.id}" ${has?'':'disabled'}>✕</button></div>`; }).join('')}
-   <div class="row"><button class="puff navy wide" data-a="export" ${n?'':'disabled'}>⬇ ${t('exportBtn')}</button></div>
+   ${sec(t('secSounds'),t('secSoundsSub'),SOUNDS.map(s=>s.id),SOUNDS.map(s=>row(s.id,`<b>${s.g}</b> · ${s.label}`,s.word)).join(''))}
+   ${sec(t('secEx'),t('secWordSub'),SOUNDS.map(s=>s.id+'w'),SOUNDS.map(s=>row(s.id+'w',`<b>${s.word}</b> ${s.em}`,s.g+' · '+s.label)).join(''))}
+   ${sec(t('secBuild'),t('secWordSub'),BWORDS.map(w=>'w-'+w),BWORDS.map(w=>row('w-'+w,`<b>${w}</b>`,'')).join(''))}
+   <div class="row"><button class="puff navy wide" data-a="export" ${CLIPS.some(id=>A.local[id])?'':'disabled'}>⬇ ${t('exportBtn')}</button></div>
    <p class="note">${t('studioNote')}</p></section>`; }
 };
 
@@ -703,13 +716,15 @@ function startMatch(){
 // ----- Build-a-Word: place letters on the lines by tapping or dragging -----
 function wordState(w){
   const gs=w[0].split(''), u=unlocked(), tiles=gs.slice();
-  while(tiles.length<Math.max(6,gs.length+2)) tiles.push(u[Math.floor(Math.random()*u.length)]);
+  const extra=shuffle(u.filter(g=>!gs.includes(g)));   // other letters first, so the choices are varied
+  while(tiles.length<Math.max(6,gs.length+2)) tiles.push(extra.length?extra.pop():u[Math.floor(Math.random()*u.length)]);
   return {gs, slots:gs.map(()=>null), tiles:shuffle(tiles).map(g=>({g,used:false})), bad:null};
 }
+const sayBuild = () => sayWord(V.ws[V.i][0], 'w-'+V.ws[V.i][0]);
 function startBuild(){
   const c=curLv(), recent=WORDS[c], older=WORDS.slice(0,c).flat();
   const ws=shuffle(recent).slice(0,older.length?3:4).concat(shuffle(older).slice(0,2));
-  go('build',Object.assign({ws,i:0},wordState(ws[0])));
+  go('build',Object.assign({ws,i:0},wordState(ws[0]))); sayBuild();
 }
 function place(ti,si){
   const tile=V.tiles[ti], v=V;
@@ -718,9 +733,9 @@ function place(ti,si){
   if(tile.g===V.gs[si]){
     V.slots[si]=tile.g; tile.used=true; V.bad=null; render(); sfx.good(); buzz(25);
     if(V.slots.every(Boolean)){
-      setTimeout(async()=>{ if(V!==v) return; confetti(); sfx.win(); buzz([30,60,30]); await speak(v.ws[v.i][0]);
-        setTimeout(()=>{ if(V!==v) return; if(V.i+1>=V.ws.length) finishTask('build'); else { V.i++; Object.assign(V,wordState(V.ws[V.i])); render(true); } },700); },500);
-    } else play(tile.g+'1');
+      setTimeout(async()=>{ if(V!==v) return; confetti(); sfx.win(); buzz([30,60,30]); await sayBuild();
+        setTimeout(()=>{ if(V!==v) return; if(V.i+1>=V.ws.length) finishTask('build'); else { V.i++; Object.assign(V,wordState(V.ws[V.i])); render(true); sayBuild(); } },700); },500);
+    } else playSoundOnly(tile.g+'1');
   } else {
     V.bad=si; render(); sfx.bad(); buzz([40,50,40]);
     setTimeout(()=>{ if(V===v&&V.bad===si){ V.bad=null; render(); } },650);
@@ -738,23 +753,40 @@ document.addEventListener('pointerup',e=>{ if(!drag) return; const d=drag; drag=
   place(d.i,si); });
 document.addEventListener('pointercancel',()=>{ if(drag){ drag=null; render(); } });
 
-let rec=null;
+let rec=null, recStarting=false;
 async function toggleRec(id){
   if(rec){ rec.mr.stop(); return; }
+  if(recStarting) return;          // ignore extra taps while the microphone is still opening
+  recStarting=true;
   try{
-    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true}); recStarting=false;
     const mr=new MediaRecorder(stream), chunks=[];
     mr.ondataavailable=e=>{ if(e.data.size) chunks.push(e.data); };
     mr.onstop=()=>{ clearTimeout(rec.timer); stream.getTracks().forEach(x=>x.stop()); dbPut(id,new Blob(chunks,{type:mr.mimeType||'audio/mp4'})); rec=null; V.rec=null; render(); sfx.good(); };
     rec={mr,timer:setTimeout(()=>mr.state==='recording'&&mr.stop(),5000)};
     mr.start(); V.rec=id; V.err=false; render();
-  }catch(e){ rec=null; V.rec=null; V.err=true; render(); }
+  }catch(e){ recStarting=false; rec=null; V.rec=null; V.err=true; render(); }
+}
+// Converts a recording to WAV, a plain format that every phone and browser can play.
+async function toWav(blob){
+  const AC=window.AudioContext||window.webkitAudioContext; actx=actx||new AC();
+  const ab=await blob.arrayBuffer();
+  const buf=await new Promise((res,rej)=>{ const p=actx.decodeAudioData(ab,res,rej); if(p&&p.catch) p.catch(rej); });
+  const rate=22050, off=new (window.OfflineAudioContext||window.webkitOfflineAudioContext)(1,Math.max(1,Math.round(buf.duration*rate)),rate);
+  const src=off.createBufferSource(); src.buffer=buf; src.connect(off.destination); src.start();
+  const pcm=(await off.startRendering()).getChannelData(0), dv=new DataView(new ArrayBuffer(44+pcm.length*2));
+  const str=(o,x)=>{ for(let i=0;i<x.length;i++) dv.setUint8(o+i,x.charCodeAt(i)); };
+  str(0,'RIFF'); dv.setUint32(4,36+pcm.length*2,true); str(8,'WAVEfmt '); dv.setUint32(16,16,true); dv.setUint16(20,1,true); dv.setUint16(22,1,true);
+  dv.setUint32(24,rate,true); dv.setUint32(28,rate*2,true); dv.setUint16(32,2,true); dv.setUint16(34,16,true); str(36,'data'); dv.setUint32(40,pcm.length*2,true);
+  for(let i=0;i<pcm.length;i++) dv.setInt16(44+i*2,Math.max(-1,Math.min(1,pcm[i]))*32767,true);
+  return new Uint8Array(dv.buffer);
 }
 async function exportAudio(){
-  const files=[], manifest={};
-  for(const s of SOUNDS){ const b=A.local[s.id]; if(!b) continue;
-    const ext=/mp4|m4a|aac/.test(b.type)?'m4a':/ogg/.test(b.type)?'ogg':/wav/.test(b.type)?'wav':'webm';
-    manifest[s.id]=s.id+'.'+ext; files.push({name:s.id+'.'+ext,data:new Uint8Array(await b.arrayBuffer())}); }
+  const files=[], manifest=Object.assign({},A.manifest);
+  for(const id of CLIPS){ const b=A.local[id]; if(!b) continue; let data, ext='wav';
+    try{ data=await toWav(b); }
+    catch(e){ data=new Uint8Array(await b.arrayBuffer()); ext=/mp4|m4a|aac/.test(b.type)?'m4a':/ogg/.test(b.type)?'ogg':/wav/.test(b.type)?'wav':'webm'; }
+    manifest[id]=id+'.'+ext; files.push({name:id+'.'+ext,data}); }
   files.push({name:'manifest.json',data:new TextEncoder().encode(JSON.stringify(manifest,null,1))});
   const url=URL.createObjectURL(makeZip(files)), a=document.createElement('a');
   a.href=url; a.download='audio.zip'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),10000);
@@ -772,13 +804,15 @@ const ACT = {
  reset:()=>{ if(confirm(t('resetQ'))){ S.done={}; S.days={}; save(); go('home'); } },
  ph:d=>go('ph',{g:d.g}),
  hear:d=>{ if(V.scr==='meet'){ V.heard[d.id]=1; render(); } play(d.id); },
+ clip:d=>playClip(d.id,null),
  level:d=>go('meet',{lv:+d.i,i:0,heard:{}}),
  quizLevel:d=>startQuiz('level',+d.i),
  meetNext:()=>{ if(V.i<LV[V.lv].length-1){ V.i++; render(true); window.scrollTo(0,0); } else startQuiz('level',V.lv); },
  replay:()=>play(V.qs[V.i].id),
  answer:d=>{ if(V.ans) return; const q=V.qs[V.i], pick=q.choices[+d.i], right=pick===q.ans; V.ans=pick; if(right){ V.score++; sfx.good(); buzz(25); } else { sfx.bad(); buzz([40,50,40]); }
    render(); const v=V; setTimeout(()=>{ if(V!==v) return; V.i++; V.ans=null; if(V.i>=V.qs.length) finishQuiz(); else { render(); play(V.qs[V.i].id); } }, right?800:1500); },
- sayWord:()=>speak(V.ws[V.i][0]),
+ sayWord:()=>sayBuild(),
+ word:d=>sayWord(sndById[d.id].word, d.id+'w'),
  task:d=>{ if(d.k==='cards') go('flash',{q:shuffle(unlocked()).slice(0,12),i:0}); else if(d.k==='hear') startQuiz('daily'); else if(d.k==='build') startBuild(); else startMatch(); },
  flashHear:()=>playAll(V.q[V.i]),
  flashGot:()=>{ sfx.good(); buzz(25); V.i++; if(V.i>=V.q.length) finishTask('cards'); else render(); },

@@ -7,7 +7,7 @@ An English phonics app for Spanish speakers. Students learn the sounds of Englis
 ## What works today (World 1)
 
 - 7 levels teaching the alphabet A to Z, four letters at a time, with every sound each letter makes
-- Sound-first cards: tap a sound to hear only that sound, with a small example word at the side
+- Sound-first cards: tap a sound to hear only that sound; tap the example word beside it to hear the word
 - A vowel drill at the end of every level quiz
 - Sound Board: tap any letter to hear its sounds
 - Daily practice checklist: phonogram cards, Hear & Tap, and Build a Word (tap or drag letters onto the lines)
@@ -35,19 +35,23 @@ Send that link to your family. On an iPhone, open it in Safari, press the Share 
 
 ## Record your voice
 
-Until you record, a computer voice reads a keyword ("apple") instead of the pure sound. Your recordings replace it.
+Open the app from its web address, press the gear, then **Teacher Studio**, and enter the teacher code: **1776**. Your device remembers it until you press Lock.
 
-1. Open the app from its web address on your phone (recording does not work in a preview).
-2. Press the gear, then **Teacher Studio**, and enter the teacher code: **1776**. Your device remembers it until you press Lock.
-3. For each row, press ⏺, say only the sound, and press ⏹. Press ▶ to check it. There are 41 sounds.
-4. Your recordings work on your phone right away.
+Teacher Studio has three lists. For each row, press ⏺, speak, and press ⏹. Press ▶ to check it.
 
-To share them with every student:
+1. **Phonogram sounds (39):** say only the sound. These are what students hear when they tap a sound.
+2. **Example words (39):** say only the word, such as "apple." Students hear it when they tap the example bubble.
+3. **Build-a-Word words (43):** say only the word, such as "cab." Students hear it in the word-building game.
 
-1. In Teacher Studio, press **Download recordings (zip)**.
-2. Give the zip to Claude Code and say: "Unzip this into the `audio` folder and push it." Students will hear your voice the next time they open the app.
+The word lists are optional. Until you record a word, a computer voice says it.
 
-Tip: record on an iPhone if you can. iPhone recordings play on every kind of device.
+To share your recordings with every student:
+
+1. Press **Download recordings (zip)** at the bottom of Teacher Studio.
+2. Double-click `audio.zip` on your computer. A folder named `audio` appears.
+3. On your GitHub repository page, click **Add file**, then **Upload files**, drag the whole `audio` folder in, and press **Commit changes**.
+
+Or give the zip to Claude Code and say: "Unzip this into the `audio` folder and push it."
 
 ## Working on it with Claude Code
 

@@ -13,9 +13,10 @@ A phonics-first English course. Students learn every sound of every phonogram, t
 ## How Val teaches (follow this order of ideas)
 
 - **Alphabet first, A to Z.** Levels unlock the letters in alphabet order, four at a time.
-- **The sound is the star.** A phonogram card plays only the pure sound when tapped ("a says ă, ā, ah"). Example words are small and off to the side, never the focus.
+- **The sound is the star.** Tapping a sound sphere plays only the pure sound ("a says ă, ā, ah"), never a word. The example word sits beside it and has its own separate clip: tapping the example bubble says the word.
+- **Example words start with the phonogram** being taught (apple, angel, almond), so the student sees and hears it first. Only where English has no such word may the letter sit elsewhere (do, rose, put, box, gym, sky). Prefer words that look alike in Spanish (ángel, océano, unicornio).
 - **Vowels get extra drilling.** Every level quiz ends with a vowel drill ("Which sound of a did you hear?"). Keep adding vowel practice wherever it fits.
-- **Build before you read.** Beginners build small words from sounds they know (the Build-a-Word game: picture on top, lines in the middle, letter spheres below; tap or drag; a correct line turns gold, a wrong one flashes red). Words grow longer as letters unlock. Only use letters already learned, each saying its first sound (the `WORDS` list).
+- **Build before you read.** Beginners build small words from sounds they know (the Build-a-Word game: picture on top, lines in the middle, letter spheres below; tap or drag; a correct line turns gold, a wrong one flashes red). Words grow longer as letters unlock. Only use letters already learned, each saying its first sound (the `WORDS` list). The word is spoken aloud when it appears and from a "Hear the word" button; **no Spanish translation is shown in this game** (it distracted students). Tapping a letter here plays only its sound.
 - **Reading-style games come later.** Fill-in-the-missing-letter and anything that shows whole words belongs after the alphabet is finished. Today a missing-letter hint appears in Hear & Tap only for sounds that have no teacher recording yet; it disappears as recordings are added.
 - **Right after the alphabet: letter teams** (World 2 below).
 
@@ -46,18 +47,18 @@ A phonics-first English course. Students learn every sound of every phonogram, t
 
 1. **Content** — `P` (phonograms, sounds, keywords, Spanish tips), `LV` (which phonograms unlock per level), `WORDS` (Build-a-Word lists per level), `T` (translations)
 2. **Saved progress** — `S` = `{lang, done, days, sfx, calm, teacher}`
-3. **Audio** — `play(id)` uses, in order: a recording on this device (IndexedDB), a file listed in `audio/manifest.json`, then a computer voice reading the keyword
+3. **Audio** — `playClip(id, fallback)` uses, in order: a recording on this device (IndexedDB), a file listed in `audio/manifest.json`, then a computer voice saying `fallback` (silent when there is none). Clip ids: `a1` = a phonogram sound, `a1w` = its example word, `w-cab` = a Build-a-Word word
 4. **Screens** — `SCREENS` object; each function returns HTML for one screen
 5. **Actions** — `ACT` object; buttons call these through `data-a` attributes
 6. **Living background** — the `fx…` functions draw the drifting stars on a canvas
 
-Sound ids are the phonogram plus a number: `a1`, `a2`, `a3`, `qu1`.
+Sound ids are the phonogram plus a number: `a1`, `a2`, `a3`, `qu1`. There are 39 sounds in World 1.
 
 ### Teacher recordings
 
 Teacher Studio is hidden behind a teacher code (`TEACHER_CODE` in `index.html`). It is a light lock to keep students out, not real security: the repository is public, so the code can be read there. Nothing a student records can reach other students.
 
-Teacher Studio exports `audio.zip` containing files such as `a1.m4a` plus `manifest.json`. Unzip its contents into `/audio/` at the repository root and push. When Val hands you a zip, do this for her.
+Teacher Studio has three sections (sounds, example words, Build-a-Word words). Word clips are optional; a computer voice says any word that has no recording. It exports `audio.zip` containing WAV files such as `a1.wav` (WAV plays on every phone) plus a `manifest.json` that also keeps every clip already online. Unzip its contents into `/audio/` at the repository root and push. When Val hands you a zip, do this for her.
 
 ## Roadmap
 
