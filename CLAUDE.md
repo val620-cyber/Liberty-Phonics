@@ -34,6 +34,9 @@ A phonics-first English course. Students learn every sound of every phonogram, t
   - Layer them creatively: navy night-sky panels with small stars, stacked red / white / baby-blue ledges under panels, and spheres that alternate red, white, navy and baby blue.
   - Val loves contrast. Use lighter and darker shades of these same colors (never new hues) to create depth, optical illusions and a feeling of space: concentric rings, stacked ledges, large soft circles in the background.
   - Gold stays special: stars and rewards first, plus tiny accents.
+- **Living background on every screen** (`#sky` and `#stars`): slow lava-lamp color blobs, shiny floating spheres down the sides on wide screens, and small stars that drift and bounce off the 3D spheres. The stars stay **behind** the cards and panels and never float over them (Val finds that distracting). Lively but subtle. No plain empty areas, on phones or on computers.
+- **Freeze / Bounce button** (`#calm`, always visible): Freeze halts all ambient motion and confetti so an overstimulated student can focus; Bounce resumes it. Any new ambient animation must stop when `html.frozen` is set (`S.calm`).
+- Sound cards: each sound is a free-floating sphere joined by a line to its example bubble. Keep example text large and easy to read.
 - Font: Arial Rounded where available, Arial otherwise. Phonogram cards are lowercase.
 - Every tap gives feedback: `buzz()` for vibration and `sfx` for sound.
 - Reward small wins like a video game: stars, confetti (`celebrate()`), checkmarks. Daily consistency is the thing to celebrate most.
@@ -42,20 +45,23 @@ A phonics-first English course. Students learn every sound of every phonogram, t
 ## How the code is organized (`index.html`)
 
 1. **Content** — `P` (phonograms, sounds, keywords, Spanish tips), `LV` (which phonograms unlock per level), `WORDS` (Build-a-Word lists per level), `T` (translations)
-2. **Saved progress** — `S` = `{lang, done, days, sfx}`
+2. **Saved progress** — `S` = `{lang, done, days, sfx, calm, teacher}`
 3. **Audio** — `play(id)` uses, in order: a recording on this device (IndexedDB), a file listed in `audio/manifest.json`, then a computer voice reading the keyword
 4. **Screens** — `SCREENS` object; each function returns HTML for one screen
 5. **Actions** — `ACT` object; buttons call these through `data-a` attributes
+6. **Living background** — the `fx…` functions draw the drifting stars on a canvas
 
 Sound ids are the phonogram plus a number: `a1`, `a2`, `a3`, `qu1`.
 
 ### Teacher recordings
 
+Teacher Studio is hidden behind a teacher code (`TEACHER_CODE` in `index.html`). It is a light lock to keep students out, not real security: the repository is public, so the code can be read there. Nothing a student records can reach other students.
+
 Teacher Studio exports `audio.zip` containing files such as `a1.m4a` plus `manifest.json`. Unzip its contents into `/audio/` at the repository root and push. When Val hands you a zip, do this for her.
 
 ## Roadmap
 
-1. **Polish World 1:** installable PWA (manifest, icons, service worker for offline), student profiles for shared devices, calendar that shows which letters are planned for each day, export/import of progress.
+1. **Polish World 1:** a "My turn" button on each sound card (student hears the teacher, records themselves, plays both back; never replaces the teacher's recording), installable PWA (manifest, icons, service worker for offline), student profiles for shared devices, calendar that shows which letters are planned for each day, export/import of progress.
 2. **World 2 — Vowel & Consonant Teams (the very next thing after the alphabet).** Most common first, a few per level, every sound of each team, same sound-first cards, vowel-team drills, and Build-a-Word with team tiles (a team such as `sh` is one tile):
    - Vowel teams: ee, ea, ai, ay, oa, ow, ou, oo, oi, oy, au, aw, ew, igh, ie, ey.
    - Consonant teams: sh, ch, th, wh, ck, ng, ph, kn, wr, tch, dge.

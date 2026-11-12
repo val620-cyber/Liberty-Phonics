@@ -23,14 +23,7 @@ body{
   margin:0;min-height:100vh;color:var(--ink);
   font-family:"Arial Rounded MT Bold","Arial Rounded MT",Arial,Helvetica,sans-serif;
   position:relative;--hero:64px;
-  background:
-    radial-gradient(circle at 90% 430px,rgba(155,211,247,.34) 0 150px,transparent 151px),
-    radial-gradient(circle at 90% 430px,rgba(155,211,247,.18) 0 230px,transparent 231px),
-    radial-gradient(circle at 4% 820px,rgba(215,38,61,.08) 0 120px,transparent 121px),
-    radial-gradient(circle at 4% 820px,rgba(215,38,61,.045) 0 200px,transparent 201px),
-    radial-gradient(circle at 94% 1250px,rgba(22,41,92,.07) 0 170px,transparent 171px),
-    linear-gradient(#E3F2FF 0,#FFFFFF 75%);
-  background-repeat:no-repeat;background-color:#fff;
+  background:linear-gradient(#E3F2FF 0,#FFFFFF 75%) no-repeat #fff;
   overscroll-behavior-y:none;
 }
 body[data-s=home],body[data-s=progress]{--hero:166px}
@@ -167,12 +160,6 @@ h2{font-size:20px}
 .grid .orb.dim{opacity:.55}
 .grid .orb{width:100%;aspect-ratio:1;font-size:30px}
 .big{width:150px;height:150px;font-size:76px;margin:30px auto 38px;box-shadow:0 7px 0 var(--baby-d),0 0 0 14px rgba(155,211,247,.28),0 0 0 30px rgba(155,211,247,.13),0 16px 24px rgba(22,41,92,.22),inset 0 -8px 14px rgba(0,0,0,.12)}
-.snd{width:100%;display:flex;align-items:center;gap:12px;text-align:left;background:var(--sky);border-radius:28px;padding:10px 14px 10px 10px;margin-top:12px;box-shadow:0 5px 0 #C4DDF3,inset 0 2px 0 #fff;transition:transform .18s var(--bounce)}
-.snd:active{transform:translateY(4px) scale(.98)}
-.snd .orb{width:76px;height:76px;font-size:30px;flex:none}
-.snd .say{flex:1;font-size:26px}
-.snd .ex{text-align:right;font-size:16px;color:#5C6F96;line-height:1.25}
-.snd .ex small{display:block;font-size:11px;font-weight:normal;font-family:Arial,Helvetica,sans-serif}
 .pic{width:130px;height:130px;font-size:64px;margin:20px auto 6px}
 .slots{display:flex;justify-content:center;gap:10px;margin:22px 0 26px}
 .slot{width:62px;height:84px;font-size:46px;font-weight:bold;display:flex;align-items:center;justify-content:center;position:relative;border-radius:22px;background:rgba(255,255,255,.7);box-shadow:inset 0 3px 6px rgba(22,41,92,.12)}
@@ -184,8 +171,38 @@ h2{font-size:20px}
 .bank{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;max-width:330px;margin:0 auto}
 .bt{width:86px;height:86px;font-size:40px;touch-action:none;user-select:none;-webkit-user-select:none}
 .bt.used{opacity:.18;pointer-events:none;transform:scale(.8)}
-.snd.heard{background:#FFF4CF;box-shadow:0 5px 0 #F0DC9A,inset 0 2px 0 #fff}
+.snd{width:100%;display:flex;align-items:center;background:none;padding:4px 0;margin-top:16px;text-align:left;transition:transform .18s var(--bounce)}
+.snd:active{transform:scale(.96)}
+.snd .orb{width:80px;height:80px;font-size:30px;flex:none;position:relative;z-index:1;animation:bob 2.8s ease-in-out infinite alternate}
+.snd:nth-of-type(even) .orb{animation-delay:-1.4s}
+.snd .orb::after{content:"🔊";position:absolute;right:-8px;bottom:-6px;width:32px;height:32px;border-radius:50%;background:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 var(--white-d)}
+.snd .link{flex:1;min-width:16px;height:9px;margin:0 -4px;border-radius:999px;background:linear-gradient(90deg,#2B4A9C,var(--baby))}
+.snd .ex{flex:none;position:relative;z-index:1;text-align:center;background:var(--sky);border-radius:30px;padding:8px 16px 9px;box-shadow:0 5px 0 #C4DDF3,inset 0 2px 0 #fff;font-size:25px;font-weight:bold;color:var(--navy);line-height:1.15}
+.snd .ex small{display:block;font-size:14px;color:#5C6F96;font-weight:normal;font-family:Arial,Helvetica,sans-serif}
+.snd .ex small:first-child{font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.snd .ex .em{font-size:28px}
+.snd.heard .link{background:linear-gradient(90deg,var(--gold-d),var(--gold))}
+.snd.heard .ex{background:#FFF4CF;box-shadow:0 5px 0 #F0DC9A,inset 0 2px 0 #fff}
+@keyframes bob{from{transform:translateY(-5px)}to{transform:translateY(5px)}}
 .hl{color:var(--red)}
+/* ---------- living background: lava-lamp color, shiny side spheres, drifting stars ---------- */
+#sky{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;will-change:transform;animation:drift 24s ease-in-out infinite alternate}
+.blob.b1{width:540px;height:540px;left:-190px;top:16%;background:radial-gradient(circle,rgba(155,211,247,.85) 0,rgba(155,211,247,.4) 45%,transparent 70%)}
+.blob.b2{width:460px;height:460px;right:-170px;top:38%;background:radial-gradient(circle,rgba(215,38,61,.30) 0,rgba(215,38,61,.13) 45%,transparent 70%);animation-duration:31s;animation-delay:-9s}
+.blob.b3{width:600px;height:600px;left:18%;bottom:-300px;background:radial-gradient(circle,rgba(47,91,216,.30) 0,rgba(47,91,216,.12) 45%,transparent 70%);animation-duration:37s;animation-delay:-17s}
+.blob.b4{width:380px;height:380px;right:12%;top:-120px;background:radial-gradient(circle,rgba(155,211,247,.75) 0,rgba(155,211,247,.3) 45%,transparent 70%);animation-duration:28s;animation-delay:-4s}
+.blob.b5{width:420px;height:420px;left:-120px;bottom:6%;background:radial-gradient(circle,rgba(215,38,61,.22) 0,rgba(215,38,61,.09) 45%,transparent 70%);animation-duration:34s;animation-delay:-22s}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(70px,-90px) scale(1.18)}100%{transform:translate(-50px,80px) scale(.88)}}
+.deco{position:absolute;display:none;animation:bobBig 5s ease-in-out infinite alternate}
+@keyframes bobBig{from{transform:translateY(-16px)}to{transform:translateY(16px)}}
+@media (min-width:900px){.deco{display:block}}
+#stars{position:fixed;inset:0;z-index:-1;pointer-events:none}
+#calm{position:fixed;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:7;padding:9px 14px;font-size:13px}
+body.tabbed #calm{bottom:calc(88px + env(safe-area-inset-bottom))}
+.frozen .blob,.frozen .deco,.frozen .snd .orb,.frozen .node.cur .orb{animation-play-state:paused}
+.codein{width:100%;border:0;outline:0;border-radius:999px;padding:16px 20px;margin-top:16px;font:inherit;font-size:28px;text-align:center;letter-spacing:.3em;color:var(--navy);background:var(--sky);box-shadow:inset 0 4px 8px rgba(22,41,92,.16)}
+.codein:focus{box-shadow:inset 0 4px 8px rgba(22,41,92,.16),0 0 0 4px var(--baby)}
 .tip{font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.45;background:#FFF9E6;border-radius:22px;padding:12px 16px;margin-top:16px}
 .note{font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.45;color:#5C6F96;margin-top:10px}
 .center{text-align:center}
@@ -245,6 +262,19 @@ h2{font-size:20px}
 <body>
 <div id="app"></div>
 <nav id="tabs"></nav>
+<div id="sky" aria-hidden="true">
+  <i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><i class="blob b4"></i><i class="blob b5"></i>
+  <i class="orb deco red"   style="width:120px;height:120px;right:calc(50% + 290px);top:20%"></i>
+  <i class="orb deco white" style="width:70px;height:70px;right:calc(50% + 380px);top:46%;animation-delay:-2s"></i>
+  <i class="orb deco navy"  style="width:150px;height:150px;right:calc(50% + 275px);top:66%;animation-delay:-3.4s"></i>
+  <i class="orb deco"       style="width:96px;height:96px;right:calc(50% + 520px);top:30%;animation-delay:-1s"></i>
+  <i class="orb deco"       style="width:90px;height:90px;left:calc(50% + 300px);top:26%;animation-delay:-2.6s"></i>
+  <i class="orb deco red"   style="width:140px;height:140px;left:calc(50% + 285px);top:50%;animation-delay:-.8s"></i>
+  <i class="orb deco white" style="width:76px;height:76px;left:calc(50% + 370px);top:80%;animation-delay:-4s"></i>
+  <i class="orb deco navy"  style="width:110px;height:110px;left:calc(50% + 520px);top:14%;animation-delay:-1.8s"></i>
+</div>
+<canvas id="stars" aria-hidden="true"></canvas>
+<button id="calm" class="puff white" data-a="calm"></button>
 
 <script>
 /* =====================================================================
@@ -356,7 +386,7 @@ const sndById = Object.fromEntries(SOUNDS.map(s=>[s.id,s]));
 
 const T = {
  en:{app:'Liberty Phonics',motto:'In God We Trust',streak:'day streak',gold:'gold stars',white:'white stars',
-  today:"Today's practice",todayLetters:'Your letters today',task_cards:'Phonogram cards',task_hear:'Hear & Tap',task_match:'Match game',task_build:'Build a word',buildTitle:'Build the word',buildHint:'Tap or drag the letters onto the lines.',vowelQ:'Which sound of “{g}” did you hear?',bonus:'Bonus',example:'example',
+  today:"Today's practice",todayLetters:'Your letters today',task_cards:'Phonogram cards',task_hear:'Hear & Tap',freeze:'Freeze',bounce:'Bounce',teacherCode:'Teacher code',codeSub:'This area is for the teacher.',unlock:'Unlock',wrongCode:'That code is not right. Try again.',lockAgain:'Lock',task_match:'Match game',task_build:'Build a word',buildTitle:'Build the word',buildHint:'Tap or drag the letters onto the lines.',vowelQ:'Which sound of “{g}” did you hear?',bonus:'Bonus',example:'example',
   world:'World 1 · The Alphabet Sounds',soon:'World 2 · Vowel & Consonant Teams — coming soon',
   home:'Home',sounds:'Sounds',progress:'Progress',
   soundsTitle:'Sound Board',soundsSub:'Tap any letter to hear its sounds.',
@@ -376,7 +406,7 @@ const T = {
   micErr:'The microphone is not available here. Open the app in Safari or Chrome from its web address and allow the microphone.',
   nothing:'No recordings yet.'},
  es:{app:'Liberty Phonics',motto:'In God We Trust · En Dios confiamos',streak:'días seguidos',gold:'estrellas de oro',white:'estrellas blancas',
-  today:'Práctica de hoy',todayLetters:'Tus letras de hoy',task_cards:'Tarjetas de fonogramas',task_hear:'Escucha y toca',task_match:'Juego de parejas',task_build:'Construye la palabra',buildTitle:'Construye la palabra',buildHint:'Toca o arrastra las letras a las líneas.',vowelQ:'¿Qué sonido de la “{g}” escuchaste?',bonus:'Extra',example:'ejemplo',
+  today:'Práctica de hoy',todayLetters:'Tus letras de hoy',task_cards:'Tarjetas de fonogramas',task_hear:'Escucha y toca',freeze:'Pausar',bounce:'Rebotar',teacherCode:'Código del maestro',codeSub:'Esta área es para el maestro.',unlock:'Abrir',wrongCode:'Ese código no es correcto. Inténtalo otra vez.',lockAgain:'Cerrar',task_match:'Juego de parejas',task_build:'Construye la palabra',buildTitle:'Construye la palabra',buildHint:'Toca o arrastra las letras a las líneas.',vowelQ:'¿Qué sonido de la “{g}” escuchaste?',bonus:'Extra',example:'ejemplo',
   world:'Mundo 1 · Los sonidos del alfabeto',soon:'Mundo 2 · Equipos de vocales y consonantes — muy pronto',
   home:'Inicio',sounds:'Sonidos',progress:'Progreso',
   soundsTitle:'Tablero de sonidos',soundsSub:'Toca cualquier letra para oír sus sonidos.',
@@ -400,8 +430,10 @@ const t = k => (T[S.lang]||T.en)[k] || T.en[k] || k;
 
 /* ---------- 2. SAVED PROGRESS ---------- */
 const KEY='liberty-phonics-v1';
+const TEACHER_CODE='1776';   // light lock that keeps students out of Teacher Studio
 let S = {lang:(navigator.language||'en').startsWith('es')?'es':'en', done:{}, days:{}, sfx:true};
 try{ Object.assign(S, JSON.parse(localStorage.getItem(KEY)||'{}')); }catch(e){}
+if(S.calm===undefined) S.calm = !!(window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches);
 const save = ()=>{ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} };
 
 const dkey = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
@@ -465,6 +497,7 @@ function buzz(pattern=12){ try{
  }catch(e){} }
 
 function confetti(){
+  if(S.calm) return;
   const chars=['★','★','★','●'], cols=['#F7B801','#D7263D','#FFFFFF','#9BD3F7','#16295C'];
   for(let i=0;i<36;i++){ const el=document.createElement('div'); el.className='conf'; el.textContent=chars[i%4];
     el.style.left=(Math.random()*100)+'vw'; el.style.color=cols[i%5]; el.style.textShadow='0 2px 0 rgba(22,41,92,.25)';
@@ -502,7 +535,7 @@ function header(title){ return `<div class="top"><h1>${title||t('app')}<small>${
   <button class="puff white round" data-a="nav" data-s="settings" aria-label="${t('settings')}">⚙</button></div>`; }
 function backBar(extra){ return `<div class="top back"><button class="puff white pill" data-a="home">‹ ${t('back')}</button>${extra||'<span style="flex:1"></span>'}</div>`; }
 function soundRow(s,heard){ return `<button class="snd ${heard?'heard':''}" data-a="hear" data-id="${s.id}">
-  <span class="orb navy">${s.label}</span><span class="say">🔊</span><span class="ex"><small>${t('example')}</small>${kwHTML(s.kw)} ${s.em}<small>${s.es}</small></span></button>`; }
+  <span class="orb navy">${s.label}</span><span class="link"></span><span class="ex"><small>${t('example')}</small>${kwHTML(s.kw)} <span class="em">${s.em}</span><small>${s.es}</small></span></button>`; }
 
 const SCREENS = {
  home(){ const c=curLv(), day=S.days[today()]||{}, n=nDone(), icons={cards:'🃏',hear:'👂',build:'🧱'};
@@ -592,11 +625,18 @@ const SCREENS = {
  settings(){ return backBar()+`<section class="card"><h2>${t('settings')}</h2>
    <div class="row"><button class="puff ${S.lang==='en'?'navy':'white'}" data-a="setLang" data-l="en">English</button><button class="puff ${S.lang==='es'?'navy':'white'}" data-a="setLang" data-l="es">Español</button></div>
    <div class="row"><button class="puff white wide" data-a="sfx">🔔 ${t('sfx')}: ${S.sfx?t('on'):t('off')}</button></div>
-   <div class="row"><button class="puff gold wide" data-a="nav" data-s="studio">🎙 ${t('studio')}</button></div>
+   <div class="row"><button class="puff gold wide" data-a="studioGate">${S.teacher?'🎙':'🔒'} ${t('studio')}</button></div>
    <div class="row"><button class="puff white wide" data-a="reset">${t('reset')}</button></div></section>`; },
 
+ lock(){ return `<div class="top back"><button class="puff white pill" data-a="nav" data-s="settings">‹ ${t('back')}</button><span style="flex:1"></span></div>
+   <section class="card pop center"><div class="orb navy" style="width:96px;height:96px;font-size:42px;margin:6px auto 14px">🔒</div>
+   <h2>${t('teacherCode')}</h2><p class="sub">${t('codeSub')}</p>
+   <input id="code" class="codein" type="password" inputmode="numeric" autocomplete="off" maxlength="12" aria-label="${t('teacherCode')}">
+   ${V.err?`<p class="tip">${t('wrongCode')}</p>`:''}
+   <div class="row"><button class="puff red wide" data-a="unlock">${t('unlock')} ›</button></div></section>`; },
+
  studio(){ const n=SOUNDS.filter(s=>A.local[s.id]).length;
-  return `<div class="top"><button class="puff white pill" data-a="nav" data-s="settings">‹ ${t('back')}</button><span style="flex:1"></span></div>
+  return `<div class="top"><button class="puff white pill" data-a="nav" data-s="settings">‹ ${t('back')}</button><span style="flex:1"></span><button class="puff white pill" data-a="relock">🔒 ${t('lockAgain')}</button></div>
    <section class="card"><h2>🎙 ${t('studioTitle')}</h2><p class="note">${t('studioSub')}</p>
    <p class="sub"><b>${n}/${SOUNDS.length}</b> ${t('recorded')}</p>
    ${V.err?`<p class="tip">${t('micErr')}</p>`:''}
@@ -615,6 +655,7 @@ function render(fresh){
   const tabs=['home','sounds','progress'], icon={home:'🏠',sounds:'🔤',progress:'📅'};
   $('#tabs').innerHTML = tabs.includes(V.scr) ? `<div>${tabs.map(s=>`<button class="${V.scr===s?'on':''}" data-a="nav" data-s="${s}">${icon[s]} ${t(s)}</button>`).join('')}</div>` : '';
   document.documentElement.lang=S.lang; document.body.dataset.s=V.scr;
+  document.body.classList.toggle('tabbed',tabs.includes(V.scr)); fxLabel();
 }
 
 /* ---------- 5. ACTIONS ---------- */
@@ -720,7 +761,11 @@ async function exportAudio(){
 }
 
 const ACT = {
- nav:d=>go(d.s), home:()=>go('home'),
+ nav:d=>go(d.s==='studio'&&!S.teacher?'lock':d.s), home:()=>go('home'),
+ studioGate:()=>go(S.teacher?'studio':'lock'),
+ unlock:()=>{ const el=$('#code'); if(el&&el.value.trim()===TEACHER_CODE){ S.teacher=1; save(); sfx.win(); go('studio'); } else { V.err=true; render(); sfx.bad(); buzz([40,50,40]); const e2=$('#code'); if(e2) e2.focus(); } },
+ relock:()=>{ S.teacher=0; save(); go('settings'); },
+ calm:()=>{ S.calm=!S.calm; save(); fxApply(); },
  lang:()=>{ S.lang=S.lang==='es'?'en':'es'; save(); render(); },
  setLang:d=>{ S.lang=d.l; save(); render(); },
  sfx:()=>{ S.sfx=!S.sfx; save(); render(); sfx.good(); },
@@ -753,7 +798,41 @@ const ACT = {
 document.addEventListener('click',e=>{ const el=e.target.closest('[data-a]'); if(!el||el.disabled) return; const f=ACT[el.dataset.a]; if(f) f(el.dataset); });
 document.addEventListener('pointerdown',e=>{ if(e.target.closest('button')){ buzz(12); sfx.pop(); } });
 
+document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&e.target.id==='code') ACT.unlock(); });
+
+/* ---------- 6. LIVING BACKGROUND: little stars drift and bounce off the spheres ---------- */
+const FX={stars:[],orbs:[],cv:null,cx:null,w:0,h:0,last:0,on:false};
+function fxLabel(){ const b=$('#calm'); if(b) b.textContent = S.calm ? '✨ '+t('bounce') : '❄️ '+t('freeze'); }
+function fxSize(){ const d=Math.min(2,window.devicePixelRatio||1); FX.w=innerWidth; FX.h=innerHeight;
+  FX.cv.width=FX.w*d; FX.cv.height=FX.h*d; FX.cx.setTransform(d,0,0,d,0,0); fxDraw(); }
+function fxOrbs(){ if(S.calm) return; FX.orbs=[...document.querySelectorAll('.orb')].filter(e=>!e.closest('.card,.mapwrap')).map(e=>{ const r=e.getBoundingClientRect();
+  return r.width&&r.bottom>0&&r.top<FX.h ? {x:r.left+r.width/2,y:r.top+r.height/2,r:r.width/2} : null; }).filter(Boolean); }
+function fxDraw(){ const c=FX.cx; c.clearRect(0,0,FX.w,FX.h); c.globalAlpha=.78; c.lineWidth=1; c.strokeStyle='rgba(22,41,92,.28)';
+  for(const s of FX.stars){ c.beginPath();
+    for(let i=0;i<10;i++){ const rr=i%2?s.r*.45:s.r, an=s.a+i*Math.PI/5; c[i?'lineTo':'moveTo'](s.x+Math.cos(an)*rr, s.y+Math.sin(an)*rr); }
+    c.closePath(); c.fillStyle=s.c; c.fill(); c.stroke(); } }
+function fxTick(now){ if(S.calm){ FX.on=false; return; }
+  const dt=Math.min(.05,(now-FX.last)/1000||0); FX.last=now;
+  for(const s of FX.stars){ s.x+=s.vx*dt; s.y+=s.vy*dt; s.a+=s.va*dt;
+    if(s.x<s.r){ s.x=s.r; s.vx=Math.abs(s.vx); } else if(s.x>FX.w-s.r){ s.x=FX.w-s.r; s.vx=-Math.abs(s.vx); }
+    if(s.y<s.r){ s.y=s.r; s.vy=Math.abs(s.vy); } else if(s.y>FX.h-s.r){ s.y=FX.h-s.r; s.vy=-Math.abs(s.vy); }
+    for(const o of FX.orbs){ const dx=s.x-o.x, dy=s.y-o.y, min=o.r+s.r+2, d2=dx*dx+dy*dy;
+      if(d2<min*min&&d2>0){ const d=Math.sqrt(d2), nx=dx/d, ny=dy/d, dot=s.vx*nx+s.vy*ny;
+        s.x=o.x+nx*min; s.y=o.y+ny*min; if(dot<0){ s.vx-=2*dot*nx; s.vy-=2*dot*ny; } } } }
+  fxDraw(); requestAnimationFrame(fxTick); }
+function fxApply(){ document.documentElement.classList.toggle('frozen',!!S.calm); fxLabel();
+  if(!S.calm&&!FX.on){ FX.on=true; FX.last=performance.now(); fxOrbs(); requestAnimationFrame(fxTick); } }
+function fxInit(){ try{
+  FX.cv=$('#stars'); FX.cx=FX.cv.getContext('2d');
+  const n=Math.max(10,Math.min(30,Math.round(innerWidth*innerHeight/45000)));
+  const cols=['#FFFFFF','#FFFFFF','#FFFFFF','#F7B801','#9BD3F7','#D7263D'];
+  for(let i=0;i<n;i++){ const an=Math.random()*6.283, sp=14+Math.random()*16;
+    FX.stars.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:Math.cos(an)*sp,vy:Math.sin(an)*sp,r:5+Math.random()*6,a:Math.random()*6.283,va:(Math.random()-.5)*.8,c:cols[i%6]}); }
+  fxSize(); addEventListener('resize',fxSize); setInterval(fxOrbs,350); fxApply();
+ }catch(e){} }
+
 render();
+fxInit();
 loadAudio().then(render);
 </script>
 </body>

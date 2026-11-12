@@ -17,6 +17,7 @@ An English phonics app for Spanish speakers. Students learn the sounds of Englis
 - English / Spanish switch, with a pronunciation tip for Spanish speakers on every letter
 - Teacher Studio for recording the sounds in your own voice
 - Button vibration and sound effects
+- A moving background with drifting stars, and a Freeze button that stops the motion for anyone who needs calm
 
 Progress is saved on each person's own phone or computer. There are no accounts and nothing to pay for.
 
@@ -37,7 +38,7 @@ Send that link to your family. On an iPhone, open it in Safari, press the Share 
 Until you record, a computer voice reads a keyword ("apple") instead of the pure sound. Your recordings replace it.
 
 1. Open the app from its web address on your phone (recording does not work in a preview).
-2. Press the gear, then **Teacher Studio**.
+2. Press the gear, then **Teacher Studio**, and enter the teacher code: **1776**. Your device remembers it until you press Lock.
 3. For each row, press ⏺, say only the sound, and press ⏹. Press ▶ to check it. There are 41 sounds.
 4. Your recordings work on your phone right away.
 
@@ -60,6 +61,7 @@ Good first requests:
 
 ## Good to know
 
+- **The teacher code is a light lock.** It keeps students out of Teacher Studio, but because the project is public on GitHub, a determined person could find it. To change it, ask Claude Code: "Change the teacher code to ____."
 - **Vibration** works on Android phones. On iPhones it only works on recent versions of iOS, and Apple may change that.
 - **Clearing browser data** on a device erases that device's progress.
 - **Please check my teaching content.** The sounds, keywords, and Spanish tips are a starting draft. You are the teacher, so correct anything that does not match how you teach it.
